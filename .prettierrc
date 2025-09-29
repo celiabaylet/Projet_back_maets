@@ -1,0 +1,3 @@
+//tabs/taille dark mode...
+
+{ "tabWidth": 2, "singleQuote": true, "semi": true, "useTabs": false }
