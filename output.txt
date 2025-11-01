@@ -1,0 +1,1218 @@
+
+================================================================================
+File: .env.example
+Size: 282 B
+================================================================================
+
+# Variables d'environnement
+# App
+PORT=3000
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=appdb
+DB_USER=app
+DB_PASS=apppass
+JWT_SECRET=fgtrejzuigvrengvoireazgbnrzafopuirehnfprieuzazfbhneazrpiufuvidesnhfgpiuraezuzfbnedqzsipsvfbqnviprpeaavbnpqeriuuovncrqpioeuvnrezqpiqvinresqiopvfenqvpirqfef
+
+================================================================================
+File: .prettierrc
+Size: 100 B
+================================================================================
+
+//tabs/taille dark mode...
+
+{ "tabWidth": 2, "singleQuote": true, "semi": true, "useTabs": false }
+
+================================================================================
+File: docker-compose.yml
+Size: 922 B
+================================================================================
+
+services:
+  db:
+    image: postgres:14
+    container_name: maets_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: maets
+      POSTGRES_PASSWORD: maets
+      POSTGRES_DB: maets_dev
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  mongo:
+    image: mongo:6
+    container_name: maets_mongo
+    restart: unless-stopped
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+
+  app:
+    image: node:18
+    container_name: maets_app
+    restart: unless-stopped
+    depends_on:
+      - db
+      - mongo
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    environment:
+      DATABASE_URL: postgres://maets:maets@db:5432/maets_dev
+      MONGO_URI: mongodb://mongo:27017/maets
+    ports:
+      - "3000:3000"
+    command: sh -c "npm install && npm run dev"
+
+volumes:
+  pgdata:
+  mongodata:
+
+
+================================================================================
+File: README.md
+Size: 0 B
+================================================================================
+
+
+
+================================================================================
+File: scripts\backup_db.py
+Size: 2.74 kB
+================================================================================
+
+import subprocess
+import ftplib
+from datetime import datetime
+import os
+import gzip
+import shutil
+
+# ---------------- CONFIGURATION ----------------
+# Base de données
+DB_TYPE = "postgresql"
+DB_HOST = "localhost"
+DB_USER = "postgres"
+DB_PASSWORD = "password"
+DB_NAME = "ma_base"
+
+# FTP
+FTP_HOST = "ftp.example.com"
+FTP_USER = "ftpuser"
+FTP_PASSWORD = "ftppass"
+FTP_DIR = "/backups"
+
+# Backups locaux
+BACKUP_DIR = os.path.join(os.path.dirname(__file__), "../backups")
+os.makedirs(BACKUP_DIR, exist_ok=True)
+
+# Rotation (nombre de backups à conserver)
+MAX_BACKUPS = 7
+
+# ---------------- NOM DU FICHIER ----------------
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+backup_file = os.path.join(BACKUP_DIR, f"backup_{timestamp}.sql")
+backup_file_gz = backup_file + ".gz"
+
+# ---------------- DUMP DE LA BASE ----------------
+if DB_TYPE == "mysql":
+    dump_cmd = f"mysqldump -h {DB_HOST} -u {DB_USER} -p{DB_PASSWORD} {DB_NAME} > {backup_file}"
+elif DB_TYPE == "postgresql":
+    dump_cmd = f"PGPASSWORD={DB_PASSWORD} pg_dump -h {DB_HOST} -U {DB_USER} {DB_NAME} -f {backup_file}"
+else:
+    raise ValueError("DB_TYPE doit être 'mysql' ou 'postgresql'")
+
+print("Création du dump...")
+subprocess.run(dump_cmd, shell=True, check=True)
+print(f"Dump créé : {backup_file}")
+
+# ---------------- COMPRESSION ----------------
+print("Compression du dump...")
+with open(backup_file, "rb") as f_in, gzip.open(backup_file_gz, "wb") as f_out:
+    shutil.copyfileobj(f_in, f_out)
+os.remove(backup_file)
+print(f"Dump compressé : {backup_file_gz}")
+
+# ---------------- ENVOI SUR FTP ----------------
+print("Envoi sur le FTP...")
+with ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASSWORD) as ftp:
+    ftp.cwd(FTP_DIR)
+    with open(backup_file_gz, "rb") as f:
+        ftp.storbinary(f"STOR {os.path.basename(backup_file_gz)}", f)
+print("Backup envoyé sur FTP !")
+
+# ---------------- ROTATION DES BACKUPS LOCAUX ----------------
+print("Rotation des backups locaux...")
+backups_local = sorted([f for f in os.listdir(BACKUP_DIR) if f.endswith(".sql.gz")])
+while len(backups_local) > MAX_BACKUPS:
+    old_file = backups_local.pop(0)
+    os.remove(os.path.join(BACKUP_DIR, old_file))
+    print(f"Supprimé local : {old_file}")
+
+# ---------------- ROTATION DES BACKUPS FTP ----------------
+print("Rotation des backups FTP...")
+with ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASSWORD) as ftp:
+    ftp.cwd(FTP_DIR)
+    files = sorted(ftp.nlst())
+    ftp_backups = [f for f in files if f.endswith(".sql.gz")]
+    while len(ftp_backups) > MAX_BACKUPS:
+        old_file = ftp_backups.pop(0)
+        ftp.delete(old_file)
+        print(f"Supprimé FTP : {old_file}")
+
+print("Sauvegarde terminée !")
+
+
+================================================================================
+File: src\app.js
+Size: 1.23 kB
+================================================================================
+
+// src/app.js
+import express from "express";
+import https from "https";
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
+
+import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import gameRoutes from "./routes/gameRoutes.js";
+import gameConfigRoutes from "./routes/gameConfigRoutes.js"; 
+
+dotenv.config();
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
+
+app.get("/", (req, res) => {
+  res.send("Backend Maets fonctionne !");
+});
+
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/games", gameRoutes);
+app.use("/api/config", gameConfigRoutes);
+
+const sslOptions = {
+  key: fs.readFileSync(path.join(process.cwd(), "certs", "server.key")),
+  cert: fs.readFileSync(path.join(process.cwd(), "certs", "server.cert")),
+};
+
+const PORT = 3001;
+https.createServer(sslOptions, app).listen(PORT, () => {
+  console.log(`✅ Serveur HTTPS lancé sur https://localhost:${PORT}`);
+});
+
+// 💡 Port dynamique (optionnel)
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
+
+
+================================================================================
+File: src\certs\server.cert
+Size: 1.27 kB
+================================================================================
+
+-----BEGIN CERTIFICATE-----
+MIIDazCCAlOgAwIBAgIUZ40yuEUPDnsCfo3ee99eUwj/byIwDQYJKoZIhvcNAQEL
+BQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM
+GEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNTEwMTUwNzQwMDlaFw0yNTEx
+MTQwNzQwMDlaMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEw
+HwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQCkCw2P2bmumMLmTWx2SSbaZekjScLD9A5L64UEGeNN
+Soh5O8cPGY8JF2UwhjWFcrTlTRDaTY+V59f7LhMdmWnJ9pRoOaf1A0HSblyswVxi
+qI86fX2LAHlh/Sby//PMqKv9FHLGysErb75iYh8H+6DyLWEbCmifYnOwClv+l8v8
+axWw/G211+deYF2BXpujGYGDEJ5pD8pJIS9GwNfns/EEkcxWpaM4w77Tv7xqbHPs
+xlMWDYDSE16Ret/k1whtsjvhYZySN8FxzTx+A7VP+P71Fi/jpgAMkHZZzlDoNr+O
+Do3wLrTmUuczDC1NI7/1UbnDfMFAHlnl8K2iV6tkoylfAgMBAAGjUzBRMB0GA1Ud
+DgQWBBRzXObU1RkgZCtzUdp5hRuPRxqNHDAfBgNVHSMEGDAWgBRzXObU1RkgZCtz
+Udp5hRuPRxqNHDAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQB9
+da7tPxE84TE7S7YPgNoayhI65O9klpDZJBC4JA7tI5HvFWoOgbYWbROtRqI2MyEy
+3P92W25RZgLLY22b3hDo8k0UP0fsrI7+L+GpLo7IpFyz0j4xrPbdRp86EZ1UHioi
++nT8rgUJx/+z+ZipAR43fK6i6pXldboOoGPbmTw29Mm5qtYk+WAghJf7Dgs3QL/u
+6O0k/nSZ861wflkxQbl/haFPVIV4klLpFhQI29eImjbKWXEPdZVynk0LRKjrTdrT
+Qy34K6td62dvUeBqVgG1o07JJ+o1YEvKcIq6c7fW1cnlXEbCD8FEwc8dBqMn+DjU
+YdR4rQ8es0b3Q2MDraEO
+-----END CERTIFICATE-----
+
+
+================================================================================
+File: src\certs\server.key
+Size: 1.73 kB
+================================================================================
+
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCkCw2P2bmumMLm
+TWx2SSbaZekjScLD9A5L64UEGeNNSoh5O8cPGY8JF2UwhjWFcrTlTRDaTY+V59f7
+LhMdmWnJ9pRoOaf1A0HSblyswVxiqI86fX2LAHlh/Sby//PMqKv9FHLGysErb75i
+Yh8H+6DyLWEbCmifYnOwClv+l8v8axWw/G211+deYF2BXpujGYGDEJ5pD8pJIS9G
+wNfns/EEkcxWpaM4w77Tv7xqbHPsxlMWDYDSE16Ret/k1whtsjvhYZySN8FxzTx+
+A7VP+P71Fi/jpgAMkHZZzlDoNr+ODo3wLrTmUuczDC1NI7/1UbnDfMFAHlnl8K2i
+V6tkoylfAgMBAAECggEANCpBo0t41RFF9SeMxKapgMzkkPCtS1PqUfEwyOeUlSkM
+8gR03hPiHOGAL6iWD3w1Ey/pGoqMjP5/e6Qgtwpoji1n7ybahrsE7O5kcRlCECuK
+9G4ghJnff64Zey+ybxP6MU4V26pxOCdeMvoB5S969FhC527tazXLFSGONI0/9GH0
+yLAswwUiffaG3vZTUaWx0TZg3tZZq1+bg439WPWXla9tI8cRO/sCet851gBUj/Mx
+QoxQ1m5UhNPBF79c+uicjYsbnoY9cy1/WY01R1A6pGFk0cZUTpl1jDKh3GXG8Tbv
+34huuFLO6Ygv5drNCMTp8RXKEDhAkFst7FJ5n7SpjQKBgQDUAW9pC/2jKsiBMhX/
+nZJZA6XzPzUiIuM9+uBIf2POZ+5XqhIqdHnZae/8LgWdTslRdG8SRzp3mESahSfI
+ByWZceJgY/E3N/zY6m8tCpO2mYoydUSzeDQy5AIDFjjdCbxSiBsU+tJ1obEId2Oj
+tBDEldURdyFtcmnDZXwrxx/3nQKBgQDGFaqXjn3kbHqob3ocD9V5TTEq0Fbs8SEx
+mymrE8oDp0H3vU9mrBMH+aVWsOL+7dX6bhmMHmEl+Zuc9QG1sevlSb87RrpmnCu8
+ptQCw72EfdFwoeox1R4AW6yl4d3n7yLiF3LHIGhYml1t9bK1y4n53VdDUbu0oeno
+EEAJJGc6KwKBgHKRM/u4lyCOBjyLLIguRuADsLJ6/eOsptDfukRzUyQ/1fVZ2udG
+enKbZS0KUc5ovTJfkYZ3J4lpp+k4+/6EnjUF7ifY2onUn7c5OUtF4/1Ri/Uomi/C
+TbMStGOmpqQMltCi7L+xq/oVnu3MVvQoYsdZkQMXNeFHaxBEz4141jWhAoGBALSX
+KjkUQrhPIiCPyY7t7JyzgIDdAnLwf2e/Y2TCHOnpwh2/7TTY6lzaACAiEkGCyhOP
+7yCszbsWbwXQ5WcmN7+J1ZuQJv7HoKRUoHOIyy6QmrKKG36lIr4G1kdBvdLnVTE1
+WYIrjJZC3a0TVIOjdj5jylvoly3ec+cLcaYkFyyTAoGAVtFujWXEaRrBIvMIYO/E
+X3S2vHsWEanzMgWy6gLB/Kl+r7JXkfLkNKxysnfXrSfP2/dIEBfdOFTPyFO/3nS3
+FAU90hQhm1gmUZP/tKFFx6v3M9cFECQTBaQu3ZA8kTC6zYeFNt5ncFL7i4dN62ES
+nGDDhP6fGu94N/jd/v5KHZE=
+-----END PRIVATE KEY-----
+
+
+================================================================================
+File: src\config\config.js
+Size: 233 B
+================================================================================
+
+import dotenv from 'dotenv';
+dotenv.config(); // Charge .env dans process.env
+
+export const DATABASE_URL = process.env.DATABASE_URL;
+export const MONGO_URI = process.env.MONGO_URI;
+export const PORT = process.env.PORT || 3000;
+
+
+================================================================================
+File: src\config\swagger.js
+Size: 16 B
+================================================================================
+
+//config swagger
+
+================================================================================
+File: src\controllers\AuthController.js
+Size: 2.25 kB
+================================================================================
+
+// src/controllers/AuthController.js
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { models } from "../models/index.js";
+import { Op } from "sequelize";
+
+const { User } = models;
+
+export const register = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: "Username, email et password requis" });
+    }
+
+    // Vérifie si email OU username déjà utilisés
+    const existing = await User.findOne({ 
+      where: { [Op.or]: [{ email }, { username }] }
+    });
+    if (existing) {
+      return res.status(400).json({ error: "Email ou username déjà utilisé" });
+    }
+    console.log("Mot de passe reçu dans register:", password);
+
+    const hashed = await bcrypt.hash(password, 10);
+    console.log("Mot de passe hashé avant création:", hashed);
+
+    const user = await User.create({ username, email, password: hashed });
+
+    res.status(201).json({ message: "Utilisateur créé", id: user.id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur lors de l'inscription" });
+  }
+};
+
+
+export const login = async (req, res) => {
+  console.log("Body reçu :", req.body);
+
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username et password requis" });
+    }
+
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(401).json({ error: "Utilisateur introuvable" });
+    }
+
+    console.log("Mot de passe entré:", password);
+    console.log("Hash en base:", user.password);
+
+    const valid = await bcrypt.compare(password, user.password);
+    console.log("Résultat de la comparaison:", valid);
+
+    if (!valid) {
+      return res.status(401).json({ error: "Mot de passe incorrect" });
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({ token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur lors de la connexion" });
+  }
+};
+
+
+================================================================================
+File: src\controllers\GameConfigController.js
+Size: 742 B
+================================================================================
+
+// src/controllers/GameConfigController.js
+import GameConfigService from "../services/GameConfigService.js";
+
+export const getConfigByGame = async (req, res) => {
+  try {
+    const config = await GameConfigService.getConfigByGame(req.params.gameId);
+    res.json(config);
+  } catch (err) {
+    console.error("Erreur getConfigByGame :", err.message);
+    res.status(404).json({ error: err.message });
+  }
+};
+
+export const updateConfig = async (req, res) => {
+  try {
+    const updatedConfig = await GameConfigService.updateConfig(req.params.gameId, req.body);
+    res.json(updatedConfig);
+  } catch (err) {
+    console.error("Erreur updateConfig :", err.message);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+
+================================================================================
+File: src\controllers\GameController.js
+Size: 1.5 kB
+================================================================================
+
+// src/controllers/GameController.js
+import GameService from "../services/GameService.js";
+
+export const createGame = async (req, res) => {
+  try {
+    const game = await GameService.createGame(req.body);
+    res.status(201).json(game);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const getGames = async (req, res) => {
+  try {
+    const games = await GameService.getAllGames();
+    res.json(games);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const getGameById = async (req, res) => {
+  try {
+    const game = await GameService.getGameById(req.params.id);
+    res.json(game);
+  } catch (err) {
+    res.status(404).json({ error: err.message });
+  }
+};
+
+export const updateGame = async (req, res) => {
+  try {
+    const game = await GameService.updateGame(req.params.id, req.body);
+    res.json(game);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const deleteGame = async (req, res) => {
+  try {
+    const result = await GameService.deleteGame(req.params.id);
+    res.json(result);
+  } catch (err) {
+    res.status(404).json({ error: err.message });
+  }
+};
+
+export const assignUserToGame = async (req, res) => {
+  try {
+    const { userId, gameId } = req.body;
+    const game = await GameService.assignUserToGame(userId, gameId);
+    res.json(game);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+
+================================================================================
+File: src\controllers\LibraryController.js
+Size: 23 B
+================================================================================
+
+//librairie utilisateur
+
+================================================================================
+File: src\controllers\UserController.js
+Size: 997 B
+================================================================================
+
+// src/controllers/UserController.js
+import { models } from "../models/index.js";
+
+const { User, Role } = models;
+
+export const createUser = async (req, res) => {
+  try {
+    const { username, email, password, roleId } = req.body;
+
+    const user = await User.create({ username, email, password });
+
+    if (roleId) {
+      const role = await Role.findByPk(roleId);
+      if (!role) return res.status(400).json({ error: "Rôle inexistant" });
+
+      await user.addRole(role); 
+    }
+
+    const userWithRoles = await User.findByPk(user.id, { include: Role });
+    res.status(201).json(userWithRoles);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({ include: Role });
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Impossible de récupérer les utilisateurs" });
+  }
+};
+
+================================================================================
+File: src\db\mongo.js
+Size: 396 B
+================================================================================
+
+// src/db/mongo.js
+import mongoose from 'mongoose';
+import { MONGO_URI } from '../config/config.js';
+
+export const connectMongo = async () => {
+  try {
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('MongoDB connection failed:', err);
+  }
+};
+
+
+================================================================================
+File: src\db\postgres.js
+Size: 455 B
+================================================================================
+
+// src/db/postgres.js
+import { PrismaClient } from '@prisma/client';
+import { DATABASE_URL } from '../config/config.js';
+
+const prisma = new PrismaClient({
+  datasources: { db: { url: DATABASE_URL } },
+});
+
+export default prisma;
+
+export const testPostgres = async () => {
+  try {
+    await prisma.$connect();
+    console.log(' Connected to PostgreSQL');
+  } catch (err) {
+    console.error('PostgreSQL connection failed:', err);
+  }
+};
+
+
+================================================================================
+File: src\middlewares\authMiddleware.js
+Size: 614 B
+================================================================================
+
+// src/middleware/authenticateToken.js
+import jwt from "jsonwebtoken";
+
+// Middleware pour vérifier le token JWT
+export default function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"]; 
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Accès refusé. Token manquant." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; 
+    next(); 
+  } catch (err) {
+    return res.status(403).json({ message: "Token invalide ou expiré." });
+  }
+}
+
+
+================================================================================
+File: src\middlewares\errorHandler.js
+Size: 0 B
+================================================================================
+
+
+
+================================================================================
+File: src\models\Game.js
+Size: 666 B
+================================================================================
+
+// models/Game.js
+export default (sequelize, DataTypes) => {
+  const Game = sequelize.define(
+    "Game",
+    {
+      title: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      releaseDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+    },
+    {
+      tableName: "game",
+      timestamps: true,
+    }
+  );
+
+  Game.associate = (models) => {
+    Game.belongsToMany(models.User, {
+      through: models.UserGame,
+      foreignKey: "gameId",
+      otherKey: "userId",
+    });
+  };
+
+  return Game;
+};
+
+
+================================================================================
+File: src\models\GameConfig.js
+Size: 475 B
+================================================================================
+
+// config nosql
+const mongoose = require("mongoose");
+
+const GameConfigSchema = new mongoose.Schema({
+  gameId: {
+    type: Number, 
+    required: true,
+    unique: true
+  },
+  settings: {
+    type: Object,
+    default: {}
+  },
+  lastUpdated: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+GameConfigSchema.pre("save", function (next) {
+  this.lastUpdated = Date.now();
+  next();
+});
+
+module.exports = mongoose.model("GameConfig", GameConfigSchema);
+
+================================================================================
+File: src\models\Index.js
+Size: 1.58 kB
+================================================================================
+
+// src/models/index.js
+import { Sequelize, DataTypes } from "sequelize";
+import dotenv from "dotenv";
+
+import UserModel from "./User.js";
+import RoleModel from "./Role.js";
+import GameModel from "./Game.js";
+import UserGameModel from "./UserGame.js";
+import UserRoleModel from "./UserRole.js";
+
+dotenv.config();
+
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+  logging: false,
+});
+
+const User = UserModel(sequelize, DataTypes);
+const Role = RoleModel(sequelize, DataTypes);
+const Game = GameModel(sequelize, DataTypes);
+const UserGame = UserGameModel(sequelize, DataTypes);
+const UserRole = UserRoleModel(sequelize, DataTypes);
+
+User.belongsToMany(Role, {
+  through: UserRole,
+  foreignKey: "UserId",   
+  otherKey: "RoleId",
+});
+
+Role.belongsToMany(User, {
+  through: UserRole,
+  foreignKey: "RoleId",
+  otherKey: "UserId",
+});
+
+User.belongsToMany(Game, {
+  through: UserGame,
+  foreignKey: "UserId",
+  otherKey: "GameId",
+});
+
+Game.belongsToMany(User, {
+  through: UserGame,
+  foreignKey: "GameId",
+  otherKey: "UserId",
+});
+
+sequelize
+  .sync({ alter: true })
+  .then(() => console.log("Tables synchronisées avec PostgreSQL"))
+  .catch((err) => console.error("Erreur de synchronisation :", err));
+
+sequelize
+  .authenticate()
+  .then(() => console.log("Connexion à PostgreSQL OK"))
+  .catch((err) => console.error("Erreur de connexion :", err));
+
+
+export { sequelize, User, Role, Game, UserGame, UserRole };
+
+export const models = { User, Role, Game, UserGame, UserRole };
+
+
+================================================================================
+File: src\models\mongoose.js
+Size: 313 B
+================================================================================
+
+// src/models/mongoose.js
+import mongoose from "mongoose";
+
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connectée"))
+  .catch((err) => console.error("Erreur MongoDB :", err));
+
+export default mongoose;
+
+
+================================================================================
+File: src\models\Role.js
+Size: 510 B
+================================================================================
+
+// models/Role.js
+export default (sequelize, DataTypes) => {
+  const Role = sequelize.define(
+    "Role",
+    {
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+      },
+    },
+    {
+      tableName: "role",
+      timestamps: false,
+    }
+  );
+
+  Role.associate = (models) => {
+    Role.belongsToMany(models.User, {
+      through: models.UserRole,
+      foreignKey: "roleId",
+      otherKey: "userId",
+    });
+  };
+
+  return Role;
+};
+
+
+================================================================================
+File: src\models\User.js
+Size: 1.04 kB
+================================================================================
+
+// models/User.js
+import bcrypt from "bcrypt";
+
+export default (sequelize, DataTypes) => {
+  const User = sequelize.define(
+    "User",
+    {
+      username: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+      },
+      email: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+    },
+    {
+      tableName: "user",
+      timestamps: true,
+    }
+  );
+
+  User.associate = (models) => {
+    User.belongsToMany(models.Role, {
+      through: models.UserRole,
+      foreignKey: "userId",
+      otherKey: "roleId",
+    });
+    User.belongsToMany(models.Game, {
+      through: models.UserGame,
+      foreignKey: "userId",
+      otherKey: "gameId",
+    });
+  };
+
+  User.beforeCreate(async (user) => {
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+  });
+
+  return User;
+};
+
+
+================================================================================
+File: src\models\UserGame.js
+Size: 642 B
+================================================================================
+
+// models/UserGame.js
+export default (sequelize, DataTypes) => {
+  const UserGame = sequelize.define(
+    "UserGame",
+    {
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "user", key: "id" },
+      },
+      gameId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "game", key: "id" },
+      },
+      addedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+    },
+    {
+      tableName: "user_game",
+      timestamps: false,
+    }
+  );
+
+  return UserGame;
+};
+
+
+================================================================================
+File: src\models\UserRole.js
+Size: 683 B
+================================================================================
+
+// models/UserRole.js
+export default (sequelize, DataTypes) => {
+  const UserRole = sequelize.define(
+    "UserRole",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      UserId: {  
+        type: DataTypes.INTEGER,
+        references: { model: "user", key: "id" },
+      },
+      RoleId: {   
+        type: DataTypes.INTEGER,
+        references: { model: "role", key: "id" },
+      },
+      assignedAt: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+    },
+    {
+      tableName: "user_role",
+      timestamps: false,
+    }
+  );
+
+  return UserRole;
+};
+
+
+================================================================================
+File: src\routes\authRoutes.js
+Size: 262 B
+================================================================================
+
+// src/routes/authRoutes.js
+import express from "express";
+import { register, login } from "../controllers/AuthController.js";
+
+const router = express.Router();
+
+router.post("/register", register);
+router.post("/login", login);
+
+export default router;
+
+
+================================================================================
+File: src\routes\gameConfigRoute.js
+Size: 408 B
+================================================================================
+
+// src/routes/gameConfigRoutes.js
+import express from "express";
+import { getConfigByGame, updateConfig } from "../controllers/GameConfigController.js";
+import authenticateToken from "../middlewares/authMiddleware.js";
+
+const router = express.Router();
+
+router.get("/:gameId", authenticateToken, getConfigByGame);
+
+router.put("/:gameId", authenticateToken, updateConfig);
+
+export default router;
+
+
+================================================================================
+File: src\routes\gameRoutes.js
+Size: 350 B
+================================================================================
+
+// src/routes/libraryRoutes.js
+import express from "express";
+import authenticateToken from "../middlewares/authMiddleware.js";
+
+const router = express.Router();
+
+router.get("/ma-librairie", authenticateToken, (req, res) => {
+  
+  res.json({ message: `Bienvenue utilisateur ${req.user.id}`, user: req.user });
+});
+
+export default router;
+
+
+================================================================================
+File: src\routes\libraryRoutes.js
+Size: 593 B
+================================================================================
+
+// src/routes/userLibraryRoutes.js
+import express from "express";
+import authenticateToken from "../middlewares/authMiddleware.js";
+import GameService from "../services/GameService.js";
+
+const router = express.Router();
+
+router.get("/ma-librairie", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const library = await GameService.getGamesByUser(userId);
+    res.json({ message: `Librairie de l'utilisateur ${userId}`, games: library });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+export default router;
+
+
+================================================================================
+File: src\routes\userRoutes.js
+Size: 258 B
+================================================================================
+
+// src/routes/userRoutes.js
+import express from "express";
+import { createUser, getUsers } from "../controllers/UserController.js";
+
+const router = express.Router();
+
+router.post("/", createUser);
+router.get("/", getUsers);
+
+export default router;
+
+
+================================================================================
+File: src\server.js
+Size: 306 B
+================================================================================
+
+// src/server.js
+import app from "./app.js";
+import { DATABASE_URL, MONGO_URI } from "./config/config.js";
+
+const PORT = process.env.PORT || 3000;
+
+console.log("Postgres :", DATABASE_URL);
+console.log("Mongo :", MONGO_URI);
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+
+================================================================================
+File: src\services\GameConfigService.js
+Size: 784 B
+================================================================================
+
+// src/services/GameConfigService.js
+import GameConfig from "../models/GameConfig.js"; 
+import { models } from "../models/index.js";
+
+const { Game } = models;
+
+export async function getConfigByGame(gameId) {
+
+  const game = await Game.findByPk(gameId);
+  if (!game) throw new Error("Jeu introuvable");
+
+  const config = await GameConfig.findOne({ gameId });
+  if (!config) throw new Error("Configuration introuvable pour ce jeu");
+
+  return config;
+}
+
+export async function updateConfig(gameId, configData) {
+  const game = await Game.findByPk(gameId);
+  if (!game) throw new Error("Jeu introuvable");
+
+  const config = await GameConfig.findOneAndUpdate(
+    { gameId },
+    { $set: configData },
+    { new: true, upsert: true } 
+  );
+
+  return config;
+}
+
+
+================================================================================
+File: src\services\GameService.js
+Size: 1.44 kB
+================================================================================
+
+// src/services/GameService.js
+import { models } from "../models/index.js";
+
+const { Game, User } = models;
+
+class GameService {
+
+  static async createGame({ title, description, releaseDate }) {
+    if (!title) throw new Error("Le titre du jeu est obligatoire");
+    const game = await Game.create({ title, description, releaseDate });
+    return game;
+  }
+
+  static async getAllGames() {
+    return await Game.findAll({ include: User });
+  }
+
+  static async getGameById(id) {
+    const game = await Game.findByPk(id, { include: User });
+    if (!game) throw new Error("Jeu introuvable");
+    return game;
+  }
+
+  static async updateGame(id, data) {
+    const game = await Game.findByPk(id);
+    if (!game) throw new Error("Jeu introuvable");
+
+    await game.update(data);
+    return game;
+  }
+
+  static async deleteGame(id) {
+    const game = await Game.findByPk(id);
+    if (!game) throw new Error("Jeu introuvable");
+
+    await game.destroy();
+    return { message: "Jeu supprimé avec succès" };
+  }
+
+  static async assignUserToGame(userId, gameId) {
+    const user = await User.findByPk(userId);
+    const game = await Game.findByPk(gameId);
+
+    if (!user) throw new Error("Utilisateur introuvable");
+    if (!game) throw new Error("Jeu introuvable");
+
+    await game.addUser(user); 
+    return await Game.findByPk(gameId, { include: User });
+  }
+}
+
+export default GameService;
+
+
+================================================================================
+File: src\services\UserService.js
+Size: 741 B
+================================================================================
+
+// src/services/UserService.js
+import { models } from "../models/index.js";
+import bcrypt from "bcrypt";
+
+const { User, Role } = models;
+
+class UserService {
+
+  static async createUser({ username, email, password, roleId }) {
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({ username, email, password: hashedPassword });
+
+    if (roleId) {
+      const role = await Role.findByPk(roleId);
+      if (!role) throw new Error("Rôle inexistant");
+      await user.addRole(role);
+    }
+
+    return await User.findByPk(user.id, { include: Role });
+  }
+
+  static async getAllUsers() {
+    return await User.findAll({ include: Role });
+  }
+}
+
+export default UserService;
+
+
+================================================================================
+File: src\utils\backup.js
+Size: 24 B
+================================================================================
+
+//strat de sauvegarde DB
+
+================================================================================
+File: tests\integration\GameController.test.js
+Size: 0 B
+================================================================================
+
+
+
+================================================================================
+File: tests\integration\gameRoute.test.js
+Size: 0 B
+================================================================================
+
+
+
+================================================================================
+File: tests\integration\UserController.test.js
+Size: 0 B
+================================================================================
+
+
+
+================================================================================
+File: tests\integration\userRoute.test.js
+Size: 0 B
+================================================================================
+
+
+
+================================================================================
+File: tests\unitaire\GameService.test.js
+Size: 0 B
+================================================================================
+
+
+
+================================================================================
+File: tests\unitaire\UserService.test.js
+Size: 0 B
+================================================================================
+
+

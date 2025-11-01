@@ -1,11 +1,10 @@
 // src/controllers/AuthController.js
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { models } = require("../models");
-const { User } = models;
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { User } from "../models/index.js";
+import { Op } from "sequelize";
 
-// Inscription
-exports.register = async (req, res) => {
+export async function register(req, res) {
   try {
     const { username, email, password } = req.body;
 
@@ -15,27 +14,27 @@ exports.register = async (req, res) => {
 
     // Vérifie si email OU username déjà utilisés
     const existing = await User.findOne({ 
-      where: { [require("sequelize").Op.or]: [{ email }, { username }] }
+      where: { [Op.or]: [{ email }, { username }] }
     });
     if (existing) {
       return res.status(400).json({ error: "Email ou username déjà utilisé" });
     }
+
     console.log("Mot de passe reçu dans register:", password);
 
     const hashed = await bcrypt.hash(password, 10);
     console.log("Mot de passe hashé avant création:", hashed);
 
-    const user = await User.create({ username, email, password: hashed });
+   const user = await User.create({ username, email, password: hashed });
 
     res.status(201).json({ message: "Utilisateur créé", id: user.id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur lors de l'inscription" });
   }
-};
+}
 
-// Connexion
-exports.login = async (req, res) => {
+export async function login(req, res) {
   console.log("Body reçu :", req.body);
 
   try {
@@ -44,7 +43,6 @@ exports.login = async (req, res) => {
       return res.status(400).json({ error: "Username et password requis" });
     }
 
-    // Recherche par username
     const user = await User.findOne({ where: { username } });
     if (!user) {
       return res.status(401).json({ error: "Utilisateur introuvable" });
@@ -53,7 +51,6 @@ exports.login = async (req, res) => {
     console.log("Mot de passe entré:", password);
     console.log("Hash en base:", user.password);
 
-    // Vérifie le mot de passe
     const valid = await bcrypt.compare(password, user.password);
     console.log("Résultat de la comparaison:", valid);
 
@@ -61,11 +58,10 @@ exports.login = async (req, res) => {
       return res.status(401).json({ error: "Mot de passe incorrect" });
     }
 
-    // Génère le token
     const token = jwt.sign(
       { id: user.id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.json({ token });
@@ -73,4 +69,4 @@ exports.login = async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Erreur lors de la connexion" });
   }
-};
+}

@@ -1,37 +1,54 @@
 // src/controllers/UserController.js
-const { models } = require("../models");
-const { User, Role } = models;
+import * as UserService from "../services/UserService.js";
 
-exports.createUser = async (req, res) => {
+export async function getAllUsers(req, res) {
   try {
-    const { username, email, password, roleId } = req.body;
-
-    // Crée l'utilisateur
-    const user = await User.create({ username, email, password });
-
-    // Si roleId fourni, lie le rôle
-    if (roleId) {
-      const role = await Role.findByPk(roleId);
-      if (!role) return res.status(400).json({ error: "Rôle inexistant" });
-
-      await user.addRole(role); // Sequelize gère UserRole
-    }
-
-    // Retourne l'utilisateur avec les rôles attachés
-    const userWithRoles = await User.findByPk(user.id, { include: Role });
-    res.status(201).json(userWithRoles);
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: err.message });
-  }
-};
-
-exports.getUsers = async (req, res) => {
-  try {
-    const users = await User.findAll({ include: Role });
+    const users = await UserService.getAllUsers();
     res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Impossible de récupérer les utilisateurs" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
-};
+}
+
+export async function getUserById(req, res) {
+  try {
+    const user = await UserService.getUserById(req.params.id);
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: error.message });
+  }
+}
+
+export async function updateUser(req, res) {
+  try {
+    const updatedUser = await UserService.updateUser(req.params.id, req.body);
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+}
+
+export async function deleteUser(req, res) {
+  try {
+    const result = await UserService.deleteUser(req.params.id);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+}
+
+export async function addGamesToUser(req, res) {
+  try {
+    const { gameIds } = req.body; 
+    const userId = req.params.id; 
+    const updatedUser = await UserService.addGamesToUser(userId, gameIds);
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+}
