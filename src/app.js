@@ -1,25 +1,29 @@
-const express = require("express");
+// src/app.js
+import express from "express";
+import dotenv from "dotenv";
+
+import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import gameRoutes from "./routes/gameRoutes.js";
+import gameConfigRoutes from "./routes/gameConfigRoute.js"; 
+import { setupSwagger } from './config/swagger.js'; 
+
+dotenv.config();
+
 const app = express();
-require("dotenv").config();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //si jamais form data envoyé
+app.use(express.urlencoded({ extended: true })); 
 
-// Route racine
 app.get("/", (req, res) => {
   res.send("Backend Maets fonctionne !");
 });
 
-// Import des routes
-const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
-
-const authRoutes = require("./routes/authRoutes");
 app.use("/api/auth", authRoutes);
-
-const gameRoutes = require("./routes/gameRoutes");
 app.use("/api/games", gameRoutes);
+app.use("/api/config", gameConfigRoutes);
 
-// Port dynamique
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
+setupSwagger(app);
+
+export default app;

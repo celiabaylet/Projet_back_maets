@@ -1,25 +1,28 @@
 // models/UserGame.js
-module.exports = (sequelize, DataTypes) => {
-  const UserGame = sequelize.define("UserGame", {
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: "user", key: "id" }
+import { sequelize } from "./index.js";
+import { DataTypes } from "sequelize";
+  export const UserGame = sequelize.define(
+    "UserGame",
+    {
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "user", key: "id" },
+      },
+      gameId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "game", key: "id" },
+      },
+      addedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
     },
-    gameId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: "game", key: "id" }
-    },
-    addedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW
+    {
+      tableName: "user_game",
+      timestamps: false,
     }
-  }, {
-    tableName: "user_game",
-    timestamps: false
-  });
+  );
 
-  return UserGame;
-};

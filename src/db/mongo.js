@@ -8,8 +8,8 @@ export const connectMongo = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('✅ Connected to MongoDB');
+    console.log('Connected to MongoDB');
   } catch (err) {
-    console.error('❌ MongoDB connection failed:', err);
+    console.error('MongoDB connection failed:', err);
   }
 };
