@@ -3,7 +3,6 @@ import * as UserService from "../../src/services/UserService.js";
 import { User, Game, Role } from "../../src/models/index.js";
 import bcrypt from "bcrypt";
 
-// Mocks
 jest.mock("../../src/models/index.js", () => ({
   User: {
     findByPk: jest.fn(),

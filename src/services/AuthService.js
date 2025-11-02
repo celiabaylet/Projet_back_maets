@@ -1,7 +1,7 @@
 // services/AuthService.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { User } from "../models/index.js"; // import nommés depuis index.js
+import { User } from "../models/index.js";
 
 const AuthService = {
   async register({ username, email, password }) {

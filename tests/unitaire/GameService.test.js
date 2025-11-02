@@ -2,7 +2,6 @@
 import * as GameService from "../../src/services/GameService.js";
 import { Game, User } from "../../src/models/index.js";
 
-// Mock des modèles Sequelize
 jest.mock("../../src/models/index.js", () => ({
   Game: {
     create: jest.fn(),

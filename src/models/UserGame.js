@@ -1,6 +1,7 @@
 // models/UserGame.js
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
+
   export const UserGame = sequelize.define(
     "UserGame",
     {

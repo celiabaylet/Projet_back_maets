@@ -24,6 +24,2716 @@ Size: 100 B
 { "tabWidth": 2, "singleQuote": true, "semi": true, "useTabs": false }
 
 ================================================================================
+File: babel.config.cjs
+Size: 105 B
+================================================================================
+
+module.exports = {
+  presets: [
+    ["@babel/preset-env", { targets: { node: "current" } }]
+  ],
+};
+
+
+================================================================================
+File: backups\2025-11-01_17-59\backup_postgres.sql
+Size: 58.44 kB
+================================================================================
+
+--
+-- PostgreSQL database dump
+--
+
+\restrict Yh6PlPtAJKA8oVyHYOn1XwanZFZ37mI6m2HDlfqxz3qzeNBeRlSWgRz6eBFPihO
+
+-- Dumped from database version 14.19 (Debian 14.19-1.pgdg13+1)
+-- Dumped by pg_dump version 14.19 (Debian 14.19-1.pgdg13+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: game; Type: TABLE; Schema: public; Owner: maets
+--
+
+CREATE TABLE public.game (
+    id integer NOT NULL,
+    title character varying(100) NOT NULL,
+    description text,
+    "releaseDate" timestamp with time zone,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.game OWNER TO maets;
+
+--
+-- Name: game_id_seq; Type: SEQUENCE; Schema: public; Owner: maets
+--
+
+CREATE SEQUENCE public.game_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.game_id_seq OWNER TO maets;
+
+--
+-- Name: game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maets
+--
+
+ALTER SEQUENCE public.game_id_seq OWNED BY public.game.id;
+
+
+--
+-- Name: role; Type: TABLE; Schema: public; Owner: maets
+--
+
+CREATE TABLE public.role (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.role OWNER TO maets;
+
+--
+-- Name: role_id_seq; Type: SEQUENCE; Schema: public; Owner: maets
+--
+
+CREATE SEQUENCE public.role_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.role_id_seq OWNER TO maets;
+
+--
+-- Name: role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maets
+--
+
+ALTER SEQUENCE public.role_id_seq OWNED BY public.role.id;
+
+
+--
+-- Name: user; Type: TABLE; Schema: public; Owner: maets
+--
+
+CREATE TABLE public."user" (
+    id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    email character varying(100) NOT NULL,
+    password character varying(255) NOT NULL,
+    "createdAt" timestamp with time zone NOT NULL,
+    "updatedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public."user" OWNER TO maets;
+
+--
+-- Name: user_game; Type: TABLE; Schema: public; Owner: maets
+--
+
+CREATE TABLE public.user_game (
+    "userId" integer NOT NULL,
+    "gameId" integer NOT NULL,
+    "addedAt" timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.user_game OWNER TO maets;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: maets
+--
+
+CREATE SEQUENCE public.user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_id_seq OWNER TO maets;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maets
+--
+
+ALTER SEQUENCE public.user_id_seq OWNED BY public."user".id;
+
+
+--
+-- Name: user_role; Type: TABLE; Schema: public; Owner: maets
+--
+
+CREATE TABLE public.user_role (
+    id integer NOT NULL,
+    "UserId" integer,
+    "RoleId" integer,
+    "assignedAt" timestamp with time zone
+);
+
+
+ALTER TABLE public.user_role OWNER TO maets;
+
+--
+-- Name: user_role_id_seq; Type: SEQUENCE; Schema: public; Owner: maets
+--
+
+CREATE SEQUENCE public.user_role_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_role_id_seq OWNER TO maets;
+
+--
+-- Name: user_role_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: maets
+--
+
+ALTER SEQUENCE public.user_role_id_seq OWNED BY public.user_role.id;
+
+
+--
+-- Name: game id; Type: DEFAULT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.game ALTER COLUMN id SET DEFAULT nextval('public.game_id_seq'::regclass);
+
+
+--
+-- Name: role id; Type: DEFAULT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role ALTER COLUMN id SET DEFAULT nextval('public.role_id_seq'::regclass);
+
+
+--
+-- Name: user id; Type: DEFAULT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_id_seq'::regclass);
+
+
+--
+-- Name: user_role id; Type: DEFAULT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.user_role ALTER COLUMN id SET DEFAULT nextval('public.user_role_id_seq'::regclass);
+
+
+--
+-- Data for Name: game; Type: TABLE DATA; Schema: public; Owner: maets
+--
+
+COPY public.game (id, title, description, "releaseDate", "createdAt", "updatedAt") FROM stdin;
+1	testupdate	resumé	2005-02-10 00:00:00+00	2025-10-29 19:49:59.006+00	2025-10-30 21:35:47.926+00
+3	test2	resuméeeeeeeeeeeeeeeeeeeeeeeeeee	2005-02-11 00:00:00+00	2025-10-31 17:40:18.527+00	2025-10-31 17:40:18.527+00
+\.
+
+
+--
+-- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: maets
+--
+
+COPY public.role (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: maets
+--
+
+COPY public."user" (id, username, email, password, "createdAt", "updatedAt") FROM stdin;
+2	test2	test2@gmail.com	$2b$10$dZ0qnA0BIM3Kln8al4sG6eJ.tyv0zu2GRjZss2GX57ZmoYJSVw8.y	2025-10-31 18:02:38.472+00	2025-10-31 18:02:38.472+00
+1	testmodif	test@gmail.com	$2b$10$Lr8pSIepN0aVEni8BbtCYu75jHp24h2Ut1.TAsM28ZBP/yzAarmbK	2025-10-29 18:46:18.284+00	2025-11-01 08:32:13.152+00
+\.
+
+
+--
+-- Data for Name: user_game; Type: TABLE DATA; Schema: public; Owner: maets
+--
+
+COPY public.user_game ("userId", "gameId", "addedAt") FROM stdin;
+1	1	2025-10-31 20:10:41.011+00
+2	1	2025-11-01 14:36:42.194+00
+\.
+
+
+--
+-- Data for Name: user_role; Type: TABLE DATA; Schema: public; Owner: maets
+--
+
+COPY public.user_role (id, "UserId", "RoleId", "assignedAt") FROM stdin;
+\.
+
+
+--
+-- Name: game_id_seq; Type: SEQUENCE SET; Schema: public; Owner: maets
+--
+
+SELECT pg_catalog.setval('public.game_id_seq', 4, true);
+
+
+--
+-- Name: role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: maets
+--
+
+SELECT pg_catalog.setval('public.role_id_seq', 1, false);
+
+
+--
+-- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: maets
+--
+
+SELECT pg_catalog.setval('public.user_id_seq', 4, true);
+
+
+--
+-- Name: user_role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: maets
+--
+
+SELECT pg_catalog.setval('public.user_role_id_seq', 1, false);
+
+
+--
+-- Name: game game_pkey; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.game
+    ADD CONSTRAINT game_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: role role_name_key; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key UNIQUE (name);
+
+
+--
+-- Name: role role_name_key1; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key1 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key10; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key10 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key11; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key11 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key12; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key12 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key13; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key13 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key14; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key14 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key15; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key15 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key16; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key16 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key17; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key17 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key18; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key18 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key19; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key19 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key2; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key2 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key20; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key20 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key21; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key21 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key22; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key22 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key23; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key23 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key24; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key24 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key25; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key25 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key26; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key26 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key27; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key27 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key28; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key28 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key29; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key29 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key3; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key3 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key30; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key30 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key31; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key31 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key32; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key32 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key33; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key33 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key34; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key34 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key35; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key35 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key36; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key36 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key37; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key37 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key38; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key38 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key39; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key39 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key4; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key4 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key40; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key40 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key41; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key41 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key42; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key42 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key43; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key43 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key44; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key44 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key45; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key45 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key46; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key46 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key47; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key47 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key48; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key48 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key49; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key49 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key5; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key5 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key50; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key50 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key51; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key51 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key52; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key52 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key53; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key53 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key54; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key54 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key55; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key55 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key56; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key56 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key57; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key57 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key58; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key58 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key59; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key59 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key6; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key6 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key60; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key60 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key61; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key61 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key62; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key62 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key63; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key63 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key64; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key64 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key65; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key65 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key66; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key66 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key67; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key67 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key68; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key68 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key69; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key69 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key7; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key7 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key70; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key70 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key71; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key71 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key72; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key72 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key73; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key73 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key74; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key74 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key75; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key75 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key76; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key76 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key77; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key77 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key78; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key78 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key79; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key79 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key8; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key8 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key80; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key80 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key81; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key81 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key82; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key82 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key83; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key83 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key84; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key84 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key85; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key85 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key86; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key86 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key87; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key87 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key88; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key88 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key89; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key89 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key9; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key9 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key90; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key90 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key91; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key91 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key92; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key92 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key93; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key93 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key94; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key94 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key95; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key95 UNIQUE (name);
+
+
+--
+-- Name: role role_name_key96; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_name_key96 UNIQUE (name);
+
+
+--
+-- Name: role role_pkey; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user user_email_key; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key UNIQUE (email);
+
+
+--
+-- Name: user user_email_key1; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key1 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key10; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key10 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key11; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key11 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key12; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key12 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key13; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key13 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key14; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key14 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key15; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key15 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key16; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key16 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key17; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key17 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key18; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key18 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key19; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key19 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key2; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key2 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key20; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key20 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key21; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key21 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key22; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key22 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key23; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key23 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key24; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key24 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key25; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key25 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key26; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key26 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key27; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key27 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key28; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key28 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key29; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key29 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key3; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key3 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key30; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key30 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key31; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key31 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key32; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key32 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key33; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key33 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key34; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key34 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key35; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key35 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key36; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key36 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key37; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key37 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key38; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key38 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key39; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key39 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key4; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key4 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key40; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key40 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key41; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key41 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key42; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key42 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key43; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key43 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key44; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key44 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key45; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key45 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key46; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key46 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key47; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key47 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key48; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key48 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key49; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key49 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key5; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key5 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key50; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key50 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key51; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key51 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key52; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key52 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key53; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key53 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key54; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key54 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key55; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key55 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key56; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key56 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key57; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key57 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key58; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key58 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key59; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key59 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key6; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key6 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key60; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key60 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key61; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key61 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key62; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key62 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key63; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key63 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key64; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key64 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key65; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key65 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key66; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key66 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key67; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key67 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key68; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key68 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key69; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key69 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key7; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key7 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key70; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key70 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key71; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key71 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key72; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key72 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key73; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key73 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key74; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key74 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key75; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key75 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key76; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key76 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key77; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key77 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key78; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key78 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key79; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key79 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key8; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key8 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key80; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key80 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key81; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key81 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key82; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key82 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key83; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key83 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key84; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key84 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key85; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key85 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key86; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key86 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key87; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key87 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key88; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key88 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key89; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key89 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key9; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key9 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key90; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key90 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key91; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key91 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key92; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key92 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key93; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key93 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key94; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key94 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key95; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key95 UNIQUE (email);
+
+
+--
+-- Name: user user_email_key96; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_email_key96 UNIQUE (email);
+
+
+--
+-- Name: user user_pkey; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_role user_role_UserId_RoleId_key; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT "user_role_UserId_RoleId_key" UNIQUE ("UserId", "RoleId");
+
+
+--
+-- Name: user_role user_role_pkey; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT user_role_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user user_username_key; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key UNIQUE (username);
+
+
+--
+-- Name: user user_username_key1; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key1 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key10; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key10 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key11; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key11 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key12; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key12 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key13; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key13 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key14; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key14 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key15; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key15 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key16; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key16 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key17; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key17 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key18; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key18 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key19; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key19 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key2; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key2 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key20; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key20 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key21; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key21 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key22; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key22 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key23; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key23 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key24; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key24 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key25; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key25 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key26; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key26 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key27; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key27 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key28; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key28 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key29; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key29 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key3; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key3 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key30; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key30 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key31; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key31 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key32; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key32 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key33; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key33 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key34; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key34 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key35; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key35 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key36; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key36 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key37; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key37 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key38; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key38 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key39; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key39 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key4; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key4 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key40; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key40 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key41; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key41 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key42; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key42 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key43; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key43 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key44; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key44 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key45; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key45 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key46; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key46 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key47; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key47 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key48; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key48 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key49; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key49 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key5; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key5 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key50; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key50 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key51; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key51 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key52; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key52 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key53; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key53 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key54; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key54 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key55; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key55 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key56; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key56 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key57; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key57 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key58; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key58 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key59; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key59 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key6; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key6 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key60; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key60 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key61; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key61 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key62; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key62 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key63; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key63 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key64; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key64 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key65; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key65 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key66; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key66 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key67; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key67 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key68; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key68 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key69; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key69 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key7; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key7 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key70; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key70 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key71; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key71 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key72; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key72 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key73; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key73 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key74; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key74 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key75; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key75 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key76; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key76 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key77; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key77 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key78; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key78 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key79; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key79 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key8; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key8 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key80; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key80 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key81; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key81 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key82; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key82 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key83; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key83 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key84; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key84 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key85; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key85 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key86; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key86 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key87; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key87 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key88; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key88 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key89; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key89 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key9; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key9 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key90; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key90 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key91; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key91 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key92; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key92 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key93; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key93 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key94; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key94 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key95; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key95 UNIQUE (username);
+
+
+--
+-- Name: user user_username_key96; Type: CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public."user"
+    ADD CONSTRAINT user_username_key96 UNIQUE (username);
+
+
+--
+-- Name: user_game user_game_gameId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.user_game
+    ADD CONSTRAINT "user_game_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES public.game(id);
+
+
+--
+-- Name: user_game user_game_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.user_game
+    ADD CONSTRAINT "user_game_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."user"(id);
+
+
+--
+-- Name: user_role user_role_RoleId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT "user_role_RoleId_fkey" FOREIGN KEY ("RoleId") REFERENCES public.role(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: user_role user_role_UserId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: maets
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT "user_role_UserId_fkey" FOREIGN KEY ("UserId") REFERENCES public."user"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+\unrestrict Yh6PlPtAJKA8oVyHYOn1XwanZFZ37mI6m2HDlfqxz3qzeNBeRlSWgRz6eBFPihO
+
+
+
+================================================================================
 File: docker-compose.yml
 Size: 922 B
 ================================================================================
@@ -82,107 +2792,91 @@ Size: 0 B
 
 ================================================================================
 File: scripts\backup_db.py
-Size: 2.74 kB
+Size: 2.35 kB
 ================================================================================
 
-import subprocess
-import ftplib
-from datetime import datetime
 import os
-import gzip
-import shutil
+import subprocess
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import urlparse
 
-# ---------------- CONFIGURATION ----------------
-# Base de données
-DB_TYPE = "postgresql"
-DB_HOST = "localhost"
-DB_USER = "postgres"
-DB_PASSWORD = "password"
-DB_NAME = "ma_base"
+# === CONFIGURATION ===
+POSTGRES_CONTAINER = "maets_postgres"  # nom du conteneur PostgreSQL
+MONGO_CONTAINER = "maets_mongo"  # nom du conteneur MongoDB
+BACKUP_DIR = Path("backups")  # dossier racine des backups
 
-# FTP
-FTP_HOST = "ftp.example.com"
-FTP_USER = "ftpuser"
-FTP_PASSWORD = "ftppass"
-FTP_DIR = "/backups"
+# === Récupération de la base PostgreSQL depuis DATABASE_URL ===
+database_url = os.getenv("DATABASE_URL", "postgres://maets:maets@localhost:5432/maets_dev")
+parsed = urlparse(database_url)
+POSTGRES_USER = parsed.username
+POSTGRES_PASSWORD = parsed.password
+POSTGRES_DB = parsed.path.lstrip("/")  # enlever le /
+POSTGRES_HOST = parsed.hostname
+POSTGRES_PORT = parsed.port or 5432
 
-# Backups locaux
-BACKUP_DIR = os.path.join(os.path.dirname(__file__), "../backups")
-os.makedirs(BACKUP_DIR, exist_ok=True)
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/maets")
+MONGO_DB = urlparse(MONGO_URI).path.lstrip("/")
 
-# Rotation (nombre de backups à conserver)
-MAX_BACKUPS = 7
+# === CRÉATION DU DOSSIER DYNAMIQUE ===
+today = datetime.now().strftime("%Y-%m-%d_%H-%M")
+backup_path = BACKUP_DIR / today
+backup_path.mkdir(parents=True, exist_ok=True)
 
-# ---------------- NOM DU FICHIER ----------------
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-backup_file = os.path.join(BACKUP_DIR, f"backup_{timestamp}.sql")
-backup_file_gz = backup_file + ".gz"
+postgres_file = backup_path / "backup_postgres.sql"
+mongo_file = backup_path / "backup_mongo.archive"
 
-# ---------------- DUMP DE LA BASE ----------------
-if DB_TYPE == "mysql":
-    dump_cmd = f"mysqldump -h {DB_HOST} -u {DB_USER} -p{DB_PASSWORD} {DB_NAME} > {backup_file}"
-elif DB_TYPE == "postgresql":
-    dump_cmd = f"PGPASSWORD={DB_PASSWORD} pg_dump -h {DB_HOST} -U {DB_USER} {DB_NAME} -f {backup_file}"
-else:
-    raise ValueError("DB_TYPE doit être 'mysql' ou 'postgresql'")
+print(f"📦 Dossier de sauvegarde : {backup_path}\n")
 
-print("Création du dump...")
-subprocess.run(dump_cmd, shell=True, check=True)
-print(f"Dump créé : {backup_file}")
+# === FONCTIONS ===
+def run_command(cmd, output_file=None):
+    """Exécute une commande shell et gère la sortie."""
+    try:
+        if output_file:
+            with open(output_file, "wb") as f:
+                subprocess.run(cmd, shell=True, check=True, stdout=f)
+        else:
+            subprocess.run(cmd, shell=True, check=True)
+        print(f"✅ Commande réussie : {cmd}")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Erreur lors de l’exécution : {cmd}")
+        print(e)
 
-# ---------------- COMPRESSION ----------------
-print("Compression du dump...")
-with open(backup_file, "rb") as f_in, gzip.open(backup_file_gz, "wb") as f_out:
-    shutil.copyfileobj(f_in, f_out)
-os.remove(backup_file)
-print(f"Dump compressé : {backup_file_gz}")
+# === SAUVEGARDE POSTGRESQL ===
+print("🐘 Sauvegarde de PostgreSQL...")
+cmd_postgres = (
+    f'docker exec {POSTGRES_CONTAINER} sh -c '
+    f'"PGPASSWORD={POSTGRES_PASSWORD} pg_dump -U {POSTGRES_USER} -d {POSTGRES_DB}"'
+)
+run_command(cmd_postgres, postgres_file)
 
-# ---------------- ENVOI SUR FTP ----------------
-print("Envoi sur le FTP...")
-with ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASSWORD) as ftp:
-    ftp.cwd(FTP_DIR)
-    with open(backup_file_gz, "rb") as f:
-        ftp.storbinary(f"STOR {os.path.basename(backup_file_gz)}", f)
-print("Backup envoyé sur FTP !")
+# === SAUVEGARDE MONGODB ===
+print("\n🍃 Sauvegarde de MongoDB...")
+cmd_mongo = (
+    f'docker exec {MONGO_CONTAINER} sh -c '
+    f'"mongodump --db={MONGO_DB} --archive"'
+)
+run_command(cmd_mongo, mongo_file)
 
-# ---------------- ROTATION DES BACKUPS LOCAUX ----------------
-print("Rotation des backups locaux...")
-backups_local = sorted([f for f in os.listdir(BACKUP_DIR) if f.endswith(".sql.gz")])
-while len(backups_local) > MAX_BACKUPS:
-    old_file = backups_local.pop(0)
-    os.remove(os.path.join(BACKUP_DIR, old_file))
-    print(f"Supprimé local : {old_file}")
-
-# ---------------- ROTATION DES BACKUPS FTP ----------------
-print("Rotation des backups FTP...")
-with ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASSWORD) as ftp:
-    ftp.cwd(FTP_DIR)
-    files = sorted(ftp.nlst())
-    ftp_backups = [f for f in files if f.endswith(".sql.gz")]
-    while len(ftp_backups) > MAX_BACKUPS:
-        old_file = ftp_backups.pop(0)
-        ftp.delete(old_file)
-        print(f"Supprimé FTP : {old_file}")
-
-print("Sauvegarde terminée !")
+# === FIN ===
+print("\n🎉 Sauvegardes terminées avec succès !")
+print(f"📁 Fichiers :\n - {postgres_file}\n - {mongo_file}")
 
 
 ================================================================================
 File: src\app.js
-Size: 1.23 kB
+Size: 747 B
 ================================================================================
 
 // src/app.js
 import express from "express";
-import https from "https";
-import fs from "fs";
-import path from "path";
 import dotenv from "dotenv";
 
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import gameRoutes from "./routes/gameRoutes.js";
-import gameConfigRoutes from "./routes/gameConfigRoutes.js"; 
+import gameConfigRoutes from "./routes/gameConfigRoute.js"; 
+import { setupSwagger } from './config/swagger.js'; 
 
 dotenv.config();
 
@@ -200,46 +2894,36 @@ app.use("/api/auth", authRoutes);
 app.use("/api/games", gameRoutes);
 app.use("/api/config", gameConfigRoutes);
 
-const sslOptions = {
-  key: fs.readFileSync(path.join(process.cwd(), "certs", "server.key")),
-  cert: fs.readFileSync(path.join(process.cwd(), "certs", "server.cert")),
-};
+setupSwagger(app);
 
-const PORT = 3001;
-https.createServer(sslOptions, app).listen(PORT, () => {
-  console.log(`✅ Serveur HTTPS lancé sur https://localhost:${PORT}`);
-});
-
-// 💡 Port dynamique (optionnel)
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`));
+export default app;
 
 
 ================================================================================
 File: src\certs\server.cert
-Size: 1.27 kB
+Size: 1.26 kB
 ================================================================================
 
 -----BEGIN CERTIFICATE-----
-MIIDazCCAlOgAwIBAgIUZ40yuEUPDnsCfo3ee99eUwj/byIwDQYJKoZIhvcNAQEL
-BQAwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM
-GEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNTEwMTUwNzQwMDlaFw0yNTEx
-MTQwNzQwMDlaMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEw
-HwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwggEiMA0GCSqGSIb3DQEB
-AQUAA4IBDwAwggEKAoIBAQCkCw2P2bmumMLmTWx2SSbaZekjScLD9A5L64UEGeNN
-Soh5O8cPGY8JF2UwhjWFcrTlTRDaTY+V59f7LhMdmWnJ9pRoOaf1A0HSblyswVxi
-qI86fX2LAHlh/Sby//PMqKv9FHLGysErb75iYh8H+6DyLWEbCmifYnOwClv+l8v8
-axWw/G211+deYF2BXpujGYGDEJ5pD8pJIS9GwNfns/EEkcxWpaM4w77Tv7xqbHPs
-xlMWDYDSE16Ret/k1whtsjvhYZySN8FxzTx+A7VP+P71Fi/jpgAMkHZZzlDoNr+O
-Do3wLrTmUuczDC1NI7/1UbnDfMFAHlnl8K2iV6tkoylfAgMBAAGjUzBRMB0GA1Ud
-DgQWBBRzXObU1RkgZCtzUdp5hRuPRxqNHDAfBgNVHSMEGDAWgBRzXObU1RkgZCtz
-Udp5hRuPRxqNHDAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQB9
-da7tPxE84TE7S7YPgNoayhI65O9klpDZJBC4JA7tI5HvFWoOgbYWbROtRqI2MyEy
-3P92W25RZgLLY22b3hDo8k0UP0fsrI7+L+GpLo7IpFyz0j4xrPbdRp86EZ1UHioi
-+nT8rgUJx/+z+ZipAR43fK6i6pXldboOoGPbmTw29Mm5qtYk+WAghJf7Dgs3QL/u
-6O0k/nSZ861wflkxQbl/haFPVIV4klLpFhQI29eImjbKWXEPdZVynk0LRKjrTdrT
-Qy34K6td62dvUeBqVgG1o07JJ+o1YEvKcIq6c7fW1cnlXEbCD8FEwc8dBqMn+DjU
-YdR4rQ8es0b3Q2MDraEO
+MIIDZTCCAk2gAwIBAgIUfp+DMxxCOlk9lw8hhwpo7/TSiucwDQYJKoZIhvcNAQEL
+BQAwQjELMAkGA1UEBhMCRlIxEDAOBgNVBAgMB0dpcm9uZGUxITAfBgNVBAoMGElu
+dGVybmV0IFdpZGdpdHMgUHR5IEx0ZDAeFw0yNTEwMjUxNTM5MDJaFw0yNTExMjQx
+NTM5MDJaMEIxCzAJBgNVBAYTAkZSMRAwDgYDVQQIDAdHaXJvbmRlMSEwHwYDVQQK
+DBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQDOc4VBFEY2bo52aaZSfg4mLVit69Ot0CNsoq+peVyPCp3lws+d
+5xUmoVF6rOJvRtb4ZEKFDh3qTjqeUa9JYmsErxS97ZKG79kCrYll+D+fQoM7PzfH
+lVM3wKGD6dArIcvMMSYflxonDYHSov4tZ9I5/kwio9Q54KS3HL/cRkUJtOkdAeh0
+jpymN1vbjcbrPA9Bwh9AT/DKjqqedph8G9gEViabrDJk3Gb1/qzaRC5UpCvLmmaq
+r1a1p1iLgHn+nWLIQv+vJt7dQ/lblwLYEzgTED4jeIh1Ybvzy/We3pY4tpMXrXDB
+1x2hmN/+fQX7XN/3/2mXYq8BhbcYMKzupPH5AgMBAAGjUzBRMB0GA1UdDgQWBBRG
+H/fLLEl//YqwNCcX97QcvH2UaTAfBgNVHSMEGDAWgBRGH/fLLEl//YqwNCcX97Qc
+vH2UaTAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBSojGmvIeN
+jc3pvlPH+5e95sPC6p0nmhMo6Oxckpt32NsyVr/61UdWphw0hSGecmQAi7OP4lgw
+0ErBuaaBET4bEeP9gC+Bo+a3m8Epphu6BSLCvoJNvbP7NulGUEbKw3jcZ/GsSMGc
+KH6snynMgowKWpLF7Bx7nG+xujyw6ARFTeEpAJFJqroAirxIqRbt+Pax57fw024C
+CFXpgIGgIRXav3IrLEGQ+8OPqZrjvbpVcUahFKI/V2l5VrcnDRileQNrSfJAyN3m
+b9rDp1H8HPbBBCiD4k8bJ7jVo2ZN+p7ovw8WABusa96Dk2bGhUKGlXRW2G+9QYMW
+5l5ezLuPepUN
 -----END CERTIFICATE-----
 
 
@@ -249,32 +2933,32 @@ Size: 1.73 kB
 ================================================================================
 
 -----BEGIN PRIVATE KEY-----
-MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCkCw2P2bmumMLm
-TWx2SSbaZekjScLD9A5L64UEGeNNSoh5O8cPGY8JF2UwhjWFcrTlTRDaTY+V59f7
-LhMdmWnJ9pRoOaf1A0HSblyswVxiqI86fX2LAHlh/Sby//PMqKv9FHLGysErb75i
-Yh8H+6DyLWEbCmifYnOwClv+l8v8axWw/G211+deYF2BXpujGYGDEJ5pD8pJIS9G
-wNfns/EEkcxWpaM4w77Tv7xqbHPsxlMWDYDSE16Ret/k1whtsjvhYZySN8FxzTx+
-A7VP+P71Fi/jpgAMkHZZzlDoNr+ODo3wLrTmUuczDC1NI7/1UbnDfMFAHlnl8K2i
-V6tkoylfAgMBAAECggEANCpBo0t41RFF9SeMxKapgMzkkPCtS1PqUfEwyOeUlSkM
-8gR03hPiHOGAL6iWD3w1Ey/pGoqMjP5/e6Qgtwpoji1n7ybahrsE7O5kcRlCECuK
-9G4ghJnff64Zey+ybxP6MU4V26pxOCdeMvoB5S969FhC527tazXLFSGONI0/9GH0
-yLAswwUiffaG3vZTUaWx0TZg3tZZq1+bg439WPWXla9tI8cRO/sCet851gBUj/Mx
-QoxQ1m5UhNPBF79c+uicjYsbnoY9cy1/WY01R1A6pGFk0cZUTpl1jDKh3GXG8Tbv
-34huuFLO6Ygv5drNCMTp8RXKEDhAkFst7FJ5n7SpjQKBgQDUAW9pC/2jKsiBMhX/
-nZJZA6XzPzUiIuM9+uBIf2POZ+5XqhIqdHnZae/8LgWdTslRdG8SRzp3mESahSfI
-ByWZceJgY/E3N/zY6m8tCpO2mYoydUSzeDQy5AIDFjjdCbxSiBsU+tJ1obEId2Oj
-tBDEldURdyFtcmnDZXwrxx/3nQKBgQDGFaqXjn3kbHqob3ocD9V5TTEq0Fbs8SEx
-mymrE8oDp0H3vU9mrBMH+aVWsOL+7dX6bhmMHmEl+Zuc9QG1sevlSb87RrpmnCu8
-ptQCw72EfdFwoeox1R4AW6yl4d3n7yLiF3LHIGhYml1t9bK1y4n53VdDUbu0oeno
-EEAJJGc6KwKBgHKRM/u4lyCOBjyLLIguRuADsLJ6/eOsptDfukRzUyQ/1fVZ2udG
-enKbZS0KUc5ovTJfkYZ3J4lpp+k4+/6EnjUF7ifY2onUn7c5OUtF4/1Ri/Uomi/C
-TbMStGOmpqQMltCi7L+xq/oVnu3MVvQoYsdZkQMXNeFHaxBEz4141jWhAoGBALSX
-KjkUQrhPIiCPyY7t7JyzgIDdAnLwf2e/Y2TCHOnpwh2/7TTY6lzaACAiEkGCyhOP
-7yCszbsWbwXQ5WcmN7+J1ZuQJv7HoKRUoHOIyy6QmrKKG36lIr4G1kdBvdLnVTE1
-WYIrjJZC3a0TVIOjdj5jylvoly3ec+cLcaYkFyyTAoGAVtFujWXEaRrBIvMIYO/E
-X3S2vHsWEanzMgWy6gLB/Kl+r7JXkfLkNKxysnfXrSfP2/dIEBfdOFTPyFO/3nS3
-FAU90hQhm1gmUZP/tKFFx6v3M9cFECQTBaQu3ZA8kTC6zYeFNt5ncFL7i4dN62ES
-nGDDhP6fGu94N/jd/v5KHZE=
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDOc4VBFEY2bo52
+aaZSfg4mLVit69Ot0CNsoq+peVyPCp3lws+d5xUmoVF6rOJvRtb4ZEKFDh3qTjqe
+Ua9JYmsErxS97ZKG79kCrYll+D+fQoM7PzfHlVM3wKGD6dArIcvMMSYflxonDYHS
+ov4tZ9I5/kwio9Q54KS3HL/cRkUJtOkdAeh0jpymN1vbjcbrPA9Bwh9AT/DKjqqe
+dph8G9gEViabrDJk3Gb1/qzaRC5UpCvLmmaqr1a1p1iLgHn+nWLIQv+vJt7dQ/lb
+lwLYEzgTED4jeIh1Ybvzy/We3pY4tpMXrXDB1x2hmN/+fQX7XN/3/2mXYq8BhbcY
+MKzupPH5AgMBAAECggEAF4g5uq14brDoYofwB5F1xGqWeUXwZsIFn6w65frpjtEb
+fA/aFs9lwkr7XMaDDZhfXYh0FUgtfG0hUmAmNkZWbii/bldmRHo8sV5IKIwvmFQp
+CDelqzASqxVfyQeoN5pjvqklhXlK565VoMWnv6jeC3KN3sRE0boQ8bcAXuJ68RGY
++xpbyIMrebzAZCWXk4AVudCVJwrk7CsMK/bYidJZJ5eekvoakRlSY6wcveTs/ZpU
+xHYtnp+tXm/1bmvO6Dyh5DcmmUBIvJxkYLob9C1q+SyU6z/ug+NzJWQ7DMiembez
+0YQskPGfhR5JTiOE6w2PigF6dOzijUDZ/cWwhj+2XwKBgQDyZfzJYKhERZp07fRl
+Z+raqyiOd+ROlSms5vPCekkcNxAkeJebiRAdsh7EX8In3wJlziiIgwZkidiyPB89
+ZSmHexLtgN80UvffPQiMGX3yq8C49Jai+BLkc9deOzWZw9ju+Ham164XDKAy6dIf
+aGQVcAM/YAO9lB3m6urzzrn02wKBgQDaCSiPY7clGJZi7Mb5iSG+4ZUsqOniW/XW
+VbvDczg5Vt4+3YHGz+A/qI2YabooOzPbofgzuLr3Yzom/ynbbSEOiL3D6BOt9ZjK
+zFUnMGcX4nTsIRUjO4ABkj4VqrCHii1FZ5AvGmwtpwhMypI5fiXl9MAmC15MZyBF
+yrCDq/4iuwKBgB4+bWDu52/FQ3VNb03rvljUPDYybVEEuXNySX29ZjvX/vKd/USR
+wGoEHGSiEgaJg7ISG+qUdoq6zEfIypkNczYNPBpYFwFfTMAUzGk2kQljNqOdGOJy
+k2Dft0Jxnsl1ry5538wHYxhLIf3YQLhcfQhTtoQExdK0lVqHexM6euc7AoGAJkhj
+YcHdX1sQ1K/EQ/4q+av8GEpUPpVs9cQ54phxb8fr39feuHy5YBQFQJSXxgaXFWI8
+BUDTOyqmBEDbJZbkrfuebi5qfinYOQtljCr4fv4ZD3jDkFsbH6uA0ScWNcYyKrSD
+YXHfOqjQUUNkJ0oZ92Vg840dcobM6NQs6AGj7o8CgYEAkXh/YC+vsi1DbqvYuTrQ
+81KeE3OpkPy7sq2PXKC3kT+G8uM5L5wk/FzitFzrSgKzOsoAFSK5wUnLcM5vWaS9
+be+io/plMTQsgw2OE7cajNwUgOItiVAMNxPflaze2+muuDyNN0P+jmZvtGvpbf3s
+IkrNsoft8zTi3BqW3yiAxV8=
 -----END PRIVATE KEY-----
 
 
@@ -293,25 +2977,59 @@ export const PORT = process.env.PORT || 3000;
 
 ================================================================================
 File: src\config\swagger.js
-Size: 16 B
+Size: 899 B
 ================================================================================
 
-//config swagger
+// src/config/swagger.js
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Maets API',
+      version: '1.0.0',
+      description: 'Documentation interactive de l’API Maets',
+    },
+    servers: [
+      {
+        url: 'https://localhost:3443/api',
+        description: 'Serveur local (HTTPS)',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+  },
+  apis: ['./src/routes/*.js'],
+};
+
+export const swaggerSpec = swaggerJSDoc(options);
+
+export function setupSwagger(app) {
+  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  console.log('📘 Swagger docs available at /api/docs');
+}
 
 ================================================================================
 File: src\controllers\AuthController.js
-Size: 2.25 kB
+Size: 2.22 kB
 ================================================================================
 
 // src/controllers/AuthController.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { models } from "../models/index.js";
+import { User } from "../models/index.js";
 import { Op } from "sequelize";
 
-const { User } = models;
-
-export const register = async (req, res) => {
+export async function register(req, res) {
   try {
     const { username, email, password } = req.body;
 
@@ -326,22 +3044,22 @@ export const register = async (req, res) => {
     if (existing) {
       return res.status(400).json({ error: "Email ou username déjà utilisé" });
     }
+
     console.log("Mot de passe reçu dans register:", password);
 
     const hashed = await bcrypt.hash(password, 10);
     console.log("Mot de passe hashé avant création:", hashed);
 
-    const user = await User.create({ username, email, password: hashed });
+   const user = await User.create({ username, email, password: hashed });
 
     res.status(201).json({ message: "Utilisateur créé", id: user.id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erreur lors de l'inscription" });
   }
-};
+}
 
-
-export const login = async (req, res) => {
+export async function login(req, res) {
   console.log("Body reçu :", req.body);
 
   try {
@@ -368,7 +3086,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.json({ token });
@@ -376,20 +3094,34 @@ export const login = async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Erreur lors de la connexion" });
   }
-};
+}
 
 
 ================================================================================
 File: src\controllers\GameConfigController.js
-Size: 742 B
+Size: 1.26 kB
 ================================================================================
 
-// src/controllers/GameConfigController.js
 import GameConfigService from "../services/GameConfigService.js";
 
+// POST : création explicite d'une config
+export const createConfig = async (req, res) => {
+  try {
+    const config = await GameConfigService.createConfig(
+      parseInt(req.params.gameId),
+      req.body.settings
+    );
+    res.status(201).json(config);
+  } catch (err) {
+    console.error("Erreur createConfig :", err.message);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+// GET : récupère la config (créée automatiquement si inexistante)
 export const getConfigByGame = async (req, res) => {
   try {
-    const config = await GameConfigService.getConfigByGame(req.params.gameId);
+    const config = await GameConfigService.getConfigByGame(parseInt(req.params.gameId));
     res.json(config);
   } catch (err) {
     console.error("Erreur getConfigByGame :", err.message);
@@ -397,9 +3129,13 @@ export const getConfigByGame = async (req, res) => {
   }
 };
 
+// PUT : met à jour ou crée la config
 export const updateConfig = async (req, res) => {
   try {
-    const updatedConfig = await GameConfigService.updateConfig(req.params.gameId, req.body);
+    const updatedConfig = await GameConfigService.updateConfig(
+      parseInt(req.params.gameId),
+      req.body
+    );
     res.json(updatedConfig);
   } catch (err) {
     console.error("Erreur updateConfig :", err.message);
@@ -410,115 +3146,123 @@ export const updateConfig = async (req, res) => {
 
 ================================================================================
 File: src\controllers\GameController.js
-Size: 1.5 kB
+Size: 1.35 kB
 ================================================================================
 
 // src/controllers/GameController.js
-import GameService from "../services/GameService.js";
+import * as GameService from "../services/GameService.js";
 
-export const createGame = async (req, res) => {
+// Création d'un jeu
+export async function createGame(req, res) {
   try {
     const game = await GameService.createGame(req.body);
     res.status(201).json(game);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
-};
+}
 
-export const getGames = async (req, res) => {
+// Récupération de tous les jeux
+export async function getAllGames(req, res) {
   try {
     const games = await GameService.getAllGames();
     res.json(games);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
+}
 
-export const getGameById = async (req, res) => {
+// Récupération d'un jeu par ID
+export async function getGameById(req, res) {
   try {
     const game = await GameService.getGameById(req.params.id);
     res.json(game);
   } catch (err) {
     res.status(404).json({ error: err.message });
   }
-};
+}
 
-export const updateGame = async (req, res) => {
+// Mise à jour d'un jeu
+export async function updateGame(req, res) {
   try {
     const game = await GameService.updateGame(req.params.id, req.body);
     res.json(game);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
-};
+}
 
-export const deleteGame = async (req, res) => {
+// Suppression d'un jeu
+export async function deleteGame(req, res) {
   try {
     const result = await GameService.deleteGame(req.params.id);
     res.json(result);
   } catch (err) {
     res.status(404).json({ error: err.message });
   }
-};
+}
 
-export const assignUserToGame = async (req, res) => {
-  try {
-    const { userId, gameId } = req.body;
-    const game = await GameService.assignUserToGame(userId, gameId);
-    res.json(game);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-};
-
-
-================================================================================
-File: src\controllers\LibraryController.js
-Size: 23 B
-================================================================================
-
-//librairie utilisateur
 
 ================================================================================
 File: src\controllers\UserController.js
-Size: 997 B
+Size: 1.47 kB
 ================================================================================
 
 // src/controllers/UserController.js
-import { models } from "../models/index.js";
+import * as UserService from "../services/UserService.js";
 
-const { User, Role } = models;
-
-export const createUser = async (req, res) => {
+export async function getAllUsers(req, res) {
   try {
-    const { username, email, password, roleId } = req.body;
-
-    const user = await User.create({ username, email, password });
-
-    if (roleId) {
-      const role = await Role.findByPk(roleId);
-      if (!role) return res.status(400).json({ error: "Rôle inexistant" });
-
-      await user.addRole(role); 
-    }
-
-    const userWithRoles = await User.findByPk(user.id, { include: Role });
-    res.status(201).json(userWithRoles);
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ error: err.message });
-  }
-};
-
-export const getUsers = async (req, res) => {
-  try {
-    const users = await User.findAll({ include: Role });
+    const users = await UserService.getAllUsers();
     res.json(users);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Impossible de récupérer les utilisateurs" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
-};
+}
+
+export async function getUserById(req, res) {
+  try {
+    const user = await UserService.getUserById(req.params.id);
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(404).json({ error: error.message });
+  }
+}
+
+export async function updateUser(req, res) {
+  try {
+    const updatedUser = await UserService.updateUser(req.params.id, req.body);
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+}
+
+export async function deleteUser(req, res) {
+  try {
+    const result = await UserService.deleteUser(req.params.id);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+}
+
+export async function addGamesToUser(req, res) {
+  try {
+    const { gameIds } = req.body; 
+    const userId = req.params.id; 
+    const updatedUser = await UserService.addGamesToUser(userId, gameIds);
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: error.message });
+  }
+}
+
 
 ================================================================================
 File: src\db\mongo.js
@@ -544,27 +3288,30 @@ export const connectMongo = async () => {
 
 ================================================================================
 File: src\db\postgres.js
-Size: 455 B
+Size: 593 B
 ================================================================================
 
 // src/db/postgres.js
-import { PrismaClient } from '@prisma/client';
-import { DATABASE_URL } from '../config/config.js';
+import { Sequelize } from "sequelize";
+import { DATABASE_URL } from "../config/config.js";
 
-const prisma = new PrismaClient({
-  datasources: { db: { url: DATABASE_URL } },
+// Crée une instance Sequelize
+export const sequelize = new Sequelize(DATABASE_URL, {
+  dialect: "postgres",
+  logging: false, // false pour désactiver les logs SQL
 });
 
-export default prisma;
-
+// Fonction de test de connexion
 export const testPostgres = async () => {
   try {
-    await prisma.$connect();
-    console.log(' Connected to PostgreSQL');
+    await sequelize.authenticate();
+    console.log("Connected to PostgreSQL via Sequelize");
   } catch (err) {
-    console.error('PostgreSQL connection failed:', err);
+    console.error("PostgreSQL connection failed:", err);
   }
 };
+
+export default sequelize;
 
 
 ================================================================================
@@ -603,12 +3350,14 @@ Size: 0 B
 
 ================================================================================
 File: src\models\Game.js
-Size: 666 B
+Size: 511 B
 ================================================================================
 
 // models/Game.js
-export default (sequelize, DataTypes) => {
-  const Game = sequelize.define(
+import { sequelize } from "./index.js";
+import { DataTypes } from "sequelize";
+
+export const Game = sequelize.define(
     "Game",
     {
       title: {
@@ -630,40 +3379,32 @@ export default (sequelize, DataTypes) => {
     }
   );
 
-  Game.associate = (models) => {
-    Game.belongsToMany(models.User, {
-      through: models.UserGame,
-      foreignKey: "gameId",
-      otherKey: "userId",
-    });
-  };
-
-  return Game;
-};
 
 
 ================================================================================
 File: src\models\GameConfig.js
-Size: 475 B
+Size: 528 B
 ================================================================================
 
 // config nosql
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const GameConfigSchema = new mongoose.Schema({
+const { Schema, model } = mongoose;
+
+const GameConfigSchema = new Schema({
   gameId: {
-    type: Number, 
+    type: Number,
     required: true,
-    unique: true
+    unique: true,
   },
   settings: {
     type: Object,
-    default: {}
+    default: {},
   },
   lastUpdated: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 GameConfigSchema.pre("save", function (next) {
@@ -671,35 +3412,28 @@ GameConfigSchema.pre("save", function (next) {
   next();
 });
 
-module.exports = mongoose.model("GameConfig", GameConfigSchema);
+const GameConfig = model("GameConfig", GameConfigSchema);
+
+export default GameConfig;
+
 
 ================================================================================
 File: src\models\Index.js
-Size: 1.58 kB
+Size: 1.13 kB
 ================================================================================
 
 // src/models/index.js
-import { Sequelize, DataTypes } from "sequelize";
+import { sequelize } from "../db/postgres.js";
 import dotenv from "dotenv";
 
-import UserModel from "./User.js";
-import RoleModel from "./Role.js";
-import GameModel from "./Game.js";
-import UserGameModel from "./UserGame.js";
-import UserRoleModel from "./UserRole.js";
+import {User} from "./User.js";
+import {Role} from "./Role.js";
+import {Game} from "./Game.js";
+import {UserGame} from "./UserGame.js";
+import {UserRole} from "./UserRole.js";
 
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgres",
-  logging: false,
-});
-
-const User = UserModel(sequelize, DataTypes);
-const Role = RoleModel(sequelize, DataTypes);
-const Game = GameModel(sequelize, DataTypes);
-const UserGame = UserGameModel(sequelize, DataTypes);
-const UserRole = UserRoleModel(sequelize, DataTypes);
 
 User.belongsToMany(Role, {
   through: UserRole,
@@ -715,14 +3449,14 @@ Role.belongsToMany(User, {
 
 User.belongsToMany(Game, {
   through: UserGame,
-  foreignKey: "UserId",
-  otherKey: "GameId",
+  foreignKey: "userId",
+  otherKey: "gameId",
 });
 
 Game.belongsToMany(User, {
   through: UserGame,
-  foreignKey: "GameId",
-  otherKey: "UserId",
+  foreignKey: "gameId",
+  otherKey: "userId",
 });
 
 sequelize
@@ -738,7 +3472,6 @@ sequelize
 
 export { sequelize, User, Role, Game, UserGame, UserRole };
 
-export const models = { User, Role, Game, UserGame, UserRole };
 
 
 ================================================================================
@@ -762,12 +3495,14 @@ export default mongoose;
 
 ================================================================================
 File: src\models\Role.js
-Size: 510 B
+Size: 354 B
 ================================================================================
 
 // models/Role.js
-export default (sequelize, DataTypes) => {
-  const Role = sequelize.define(
+import { sequelize } from "./index.js";
+import { DataTypes } from "sequelize";
+
+ export const Role = sequelize.define(
     "Role",
     {
       name: {
@@ -782,28 +3517,18 @@ export default (sequelize, DataTypes) => {
     }
   );
 
-  Role.associate = (models) => {
-    Role.belongsToMany(models.User, {
-      through: models.UserRole,
-      foreignKey: "roleId",
-      otherKey: "userId",
-    });
-  };
-
-  return Role;
-};
-
 
 ================================================================================
 File: src\models\User.js
-Size: 1.04 kB
+Size: 566 B
 ================================================================================
 
 // models/User.js
-import bcrypt from "bcrypt";
+import { sequelize } from "./index.js";
+import { DataTypes } from "sequelize";
 
-export default (sequelize, DataTypes) => {
-  const User = sequelize.define(
+
+export const User = sequelize.define(
     "User",
     {
       username: {
@@ -827,36 +3552,16 @@ export default (sequelize, DataTypes) => {
     }
   );
 
-  User.associate = (models) => {
-    User.belongsToMany(models.Role, {
-      through: models.UserRole,
-      foreignKey: "userId",
-      otherKey: "roleId",
-    });
-    User.belongsToMany(models.Game, {
-      through: models.UserGame,
-      foreignKey: "userId",
-      otherKey: "gameId",
-    });
-  };
-
-  User.beforeCreate(async (user) => {
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
-  });
-
-  return User;
-};
-
 
 ================================================================================
 File: src\models\UserGame.js
-Size: 642 B
+Size: 662 B
 ================================================================================
 
 // models/UserGame.js
-export default (sequelize, DataTypes) => {
-  const UserGame = sequelize.define(
+import { sequelize } from "./index.js";
+import { DataTypes } from "sequelize";
+  export const UserGame = sequelize.define(
     "UserGame",
     {
       userId: {
@@ -881,18 +3586,17 @@ export default (sequelize, DataTypes) => {
     }
   );
 
-  return UserGame;
-};
 
 
 ================================================================================
 File: src\models\UserRole.js
-Size: 683 B
+Size: 699 B
 ================================================================================
 
 // models/UserRole.js
-export default (sequelize, DataTypes) => {
-  const UserRole = sequelize.define(
+import { sequelize } from "./index.js";
+import { DataTypes } from "sequelize";
+export const UserRole = sequelize.define(
     "UserRole",
     {
       id: {
@@ -919,13 +3623,10 @@ export default (sequelize, DataTypes) => {
     }
   );
 
-  return UserRole;
-};
-
 
 ================================================================================
 File: src\routes\authRoutes.js
-Size: 262 B
+Size: 2.36 kB
 ================================================================================
 
 // src/routes/authRoutes.js
@@ -934,7 +3635,82 @@ import { register, login } from "../controllers/AuthController.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Crée un nouvel utilisateur
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - email
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: johndoe
+ *               email:
+ *                 type: string
+ *                 example: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 example: mysecret123
+ *     responses:
+ *       201:
+ *         description: Utilisateur créé avec succès
+ *       400:
+ *         description: Données invalides
+ */
 router.post("/register", register);
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Connexion d'un utilisateur
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: johndoe
+ *               password:
+ *                 type: string
+ *                 example: mysecret123
+ *     responses:
+ *       200:
+ *         description: Connexion réussie
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: Token JWT à utiliser pour les requêtes authentifiées
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       400:
+ *         description: Données manquantes ou invalides
+ *       401:
+ *         description: Nom d'utilisateur ou mot de passe incorrect
+ *       500:
+ *         description: Erreur serveur
+ */
+
 router.post("/login", login);
 
 export default router;
@@ -942,18 +3718,140 @@ export default router;
 
 ================================================================================
 File: src\routes\gameConfigRoute.js
-Size: 408 B
+Size: 3.95 kB
 ================================================================================
 
 // src/routes/gameConfigRoutes.js
 import express from "express";
-import { getConfigByGame, updateConfig } from "../controllers/GameConfigController.js";
+import { createConfig, getConfigByGame, updateConfig } from "../controllers/GameConfigController.js";
 import authenticateToken from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /config/{gameId}:
+ *   post:
+ *     summary: Crée une configuration pour un jeu spécifique
+ *     tags: [GameConfig]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du jeu concerné (lié au jeu dans PostgreSQL)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               settings:
+ *                 type: object
+ *                 example:
+ *                   difficulty: "medium"
+ *                   volume: 75
+ *     responses:
+ *       201:
+ *         description: Configuration créée avec succès
+ *       400:
+ *         description: Données invalides ou configuration déjà existante
+ *       401:
+ *         description: Accès refusé - Token manquant ou invalide
+ *       500:
+ *         description: Erreur serveur
+ */
+router.post("/:gameId", authenticateToken, createConfig);
+
+/**
+ * @swagger
+ * /config/{gameId}:
+ *   get:
+ *     summary: Récupère la configuration d’un jeu spécifique
+ *     tags: [GameConfig]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du jeu concerné
+ *     responses:
+ *       200:
+ *         description: Configuration récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: 69051d50b4caecb23c7318ae
+ *                 gameId:
+ *                   type: integer
+ *                   example: 1
+ *                 settings:
+ *                   type: object
+ *                   example:
+ *                     difficulty: "medium"
+ *                     volume: 75
+ *                 lastUpdated:
+ *                   type: string
+ *                   format: date-time
+ *       404:
+ *         description: Configuration non trouvée
+ *       401:
+ *         description: Accès refusé - Token manquant ou invalide
+ *       500:
+ *         description: Erreur serveur
+ */
 router.get("/:gameId", authenticateToken, getConfigByGame);
 
+/**
+ * @swagger
+ * /config/{gameId}:
+ *   put:
+ *     summary: Met à jour la configuration d’un jeu
+ *     tags: [GameConfig]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: gameId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du jeu concerné
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               settings:
+ *                 type: object
+ *                 example:
+ *                   difficulty: "hard"
+ *                   volume: 50
+ *     responses:
+ *       200:
+ *         description: Configuration mise à jour avec succès
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Accès refusé - Token manquant ou invalide
+ *       404:
+ *         description: Configuration non trouvée
+ *       500:
+ *         description: Erreur serveur
+ */
 router.put("/:gameId", authenticateToken, updateConfig);
 
 export default router;
@@ -961,258 +3859,1227 @@ export default router;
 
 ================================================================================
 File: src\routes\gameRoutes.js
-Size: 350 B
+Size: 5.51 kB
 ================================================================================
 
-// src/routes/libraryRoutes.js
+// src/routes/gameRoutes.js
 import express from "express";
 import authenticateToken from "../middlewares/authMiddleware.js";
+import { createGame, getAllGames, getGameById, updateGame, deleteGame } from "../controllers/GameController.js";
 
 const router = express.Router();
 
-router.get("/ma-librairie", authenticateToken, (req, res) => {
-  
-  res.json({ message: `Bienvenue utilisateur ${req.user.id}`, user: req.user });
-});
+/**
+ * @swagger
+ * /games:
+ *   post:
+ *     summary: Ajoute un nouveau jeu
+ *     tags: [Games]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: The Legend of Zelda Breath of the Wild
+ *               description:
+ *                 type: string
+ *                 example: Un jeu d'aventure en monde ouvert développé par Nintendo.
+ *               releaseDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 2017-03-03
+ *     responses:
+ *       201:
+ *         description: Jeu créé avec succès
+ *       400:
+ *         description: Données invalides
+ *       401:
+ *         description: Token manquant ou invalide
+ */
+router.post("/", authenticateToken, createGame);
 
-export default router;
+/**
+ * @swagger
+ * /games:
+ *   get:
+ *     summary: Récupère la liste de tous les jeux
+ *     tags: [Games]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Liste des jeux récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   title:
+ *                     type: string
+ *                     example: Super Mario Odyssey
+ *                   description:
+ *                     type: string
+ *                     example: Jeu de plateforme en 3D développé par Nintendo.
+ *                   releaseDate:
+ *                     type: string
+ *                     format: date
+ *                     example: 2017-10-27
+ *       401:
+ *         description: Token manquant ou invalide
+ */
+router.get("/", authenticateToken, getAllGames);
 
+/**
+ * @swagger
+ * /games/{id}:
+ *   get:
+ *     summary: Récupère un jeu par son ID
+ *     tags: [Games]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du jeu
+ *     responses:
+ *       200:
+ *         description: Jeu trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 title:
+ *                   type: string
+ *                   example: Mario Kart 8 Deluxe
+ *                 description:
+ *                   type: string
+ *                   example: Jeu de course développé par Nintendo.
+ *                 releaseDate:
+ *                   type: string
+ *                   format: date
+ *                   example: 2017-04-28
+ *       404:
+ *         description: Jeu non trouvé
+ *       401:
+ *         description: Token manquant ou invalide
+ */
+router.get("/:id", authenticateToken, getGameById);
 
-================================================================================
-File: src\routes\libraryRoutes.js
-Size: 593 B
-================================================================================
+/**
+ * @swagger
+ * /games/{id}:
+ *   put:
+ *     summary: Met à jour un jeu
+ *     tags: [Games]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du jeu à modifier
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: The Legend of Zelda Tears of the Kingdom
+ *               description:
+ *                 type: string
+ *                 example: Suite de Breath of the Wild
+ *               releaseDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 2023-05-12
+ *     responses:
+ *       200:
+ *         description: Jeu mis à jour avec succès
+ *       400:
+ *         description: Données invalides
+ *       404:
+ *         description: Jeu non trouvé
+ *       401:
+ *         description: Token manquant ou invalide
+ */
+router.put("/:id", authenticateToken, updateGame);
 
-// src/routes/userLibraryRoutes.js
-import express from "express";
-import authenticateToken from "../middlewares/authMiddleware.js";
-import GameService from "../services/GameService.js";
-
-const router = express.Router();
-
-router.get("/ma-librairie", authenticateToken, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const library = await GameService.getGamesByUser(userId);
-    res.json({ message: `Librairie de l'utilisateur ${userId}`, games: library });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+/**
+ * @swagger
+ * /games/{id}:
+ *   delete:
+ *     summary: Supprime un jeu
+ *     tags: [Games]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du jeu à supprimer
+ *     responses:
+ *       200:
+ *         description: Jeu supprimé avec succès
+ *       404:
+ *         description: Jeu non trouvé
+ *       401:
+ *         description: Token manquant ou invalide
+ */
+router.delete("/:id", authenticateToken, deleteGame);
 
 export default router;
 
 
 ================================================================================
 File: src\routes\userRoutes.js
-Size: 258 B
+Size: 4.71 kB
 ================================================================================
 
 // src/routes/userRoutes.js
 import express from "express";
-import { createUser, getUsers } from "../controllers/UserController.js";
+import { getAllUsers, getUserById, updateUser, deleteUser, addGamesToUser } from "../controllers/UserController.js";
 
 const router = express.Router();
 
-router.post("/", createUser);
-router.get("/", getUsers);
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Récupère tous les utilisateurs
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Liste des utilisateurs récupérée avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   username:
+ *                     type: string
+ *                     example: johndoe
+ *                   email:
+ *                     type: string
+ *                     example: johndoe@example.com
+ *       500:
+ *         description: Erreur serveur
+ */
+router.get("/", getAllUsers);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Récupère un utilisateur par ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de l'utilisateur à récupérer
+ *     responses:
+ *       200:
+ *         description: Utilisateur trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 username:
+ *                   type: string
+ *                   example: johndoe
+ *                 email:
+ *                   type: string
+ *                   example: johndoe@example.com
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
+router.get("/:id", getUserById);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Met à jour un utilisateur
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de l'utilisateur à modifier
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: newusername
+ *               email:
+ *                 type: string
+ *                 example: newemail@example.com
+ *               password:
+ *                 type: string
+ *                 example: newpassword123
+ *     responses:
+ *       200:
+ *         description: Utilisateur mis à jour avec succès
+ *       400:
+ *         description: Données invalides
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
+router.put("/:id", updateUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Supprime un utilisateur
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de l'utilisateur à supprimer
+ *     responses:
+ *       200:
+ *         description: Utilisateur supprimé avec succès
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
+router.delete("/:id", deleteUser);
+
+/**
+ * @swagger
+ * /users/{id}/games:
+ *   post:
+ *     summary: Ajoute des jeux à un utilisateur
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de l'utilisateur
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               gameIds:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 example: [1, 2, 5]
+ *     responses:
+ *       200:
+ *         description: Jeux ajoutés avec succès
+ *       400:
+ *         description: Données invalides
+ *       404:
+ *         description: Utilisateur non trouvé
+ *       500:
+ *         description: Erreur serveur
+ */
+router.post("/:id/games", addGamesToUser);
 
 export default router;
 
 
 ================================================================================
 File: src\server.js
-Size: 306 B
+Size: 1.45 kB
 ================================================================================
 
 // src/server.js
-import app from "./app.js";
-import { DATABASE_URL, MONGO_URI } from "./config/config.js";
+import 'dotenv/config'; // charge .env
+import fs from 'fs';
+import https from 'https';
+import http from 'http';
+import app from './app.js';
+import { testPostgres } from './db/postgres.js';
+import { connectMongo } from './db/mongo.js';
+import { sequelize } from './models/index.js';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;        // HTTP
+const HTTPS_PORT = process.env.HTTPS_PORT || 3443; // HTTPS
 
-console.log("Postgres :", DATABASE_URL);
-console.log("Mongo :", MONGO_URI);
+async function startServer() {
+  try {
+    // Connexions aux bases de données
+    await testPostgres();
+    await connectMongo();
+    await sequelize.sync({ alter: true });
+    console.log('Tables SQL synchronisées');
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    // Lecture des certificats SSL
+    const key = fs.readFileSync('./src/certs/server.key');
+    const cert = fs.readFileSync('./src/certs/server.cert');
+
+    // Serveur HTTPS principal
+    https.createServer({ key, cert }, app).listen(HTTPS_PORT, () => {
+      console.log(`HTTPS Server running on https://localhost:${HTTPS_PORT}`);
+    });
+
+    // Serveur HTTP secondaire (redirige tout vers HTTPS)
+    http.createServer((req, res) => {
+      res.writeHead(301, { Location: `https://localhost:${HTTPS_PORT}${req.url}` });
+      res.end();
+    }).listen(PORT, () => {
+      console.log(`HTTP redirect server running on http://localhost:${PORT}`);
+    });
+
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
+
+================================================================================
+File: src\services\AuthService.js
+Size: 1.08 kB
+================================================================================
+
+// services/AuthService.js
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { User } from "../models/index.js"; // import nommés depuis index.js
+
+const AuthService = {
+  async register({ username, email, password }) {
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) throw new Error("Un utilisateur avec cet email existe déjà");
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return await User.create({ username, email, password: hashedPassword });
+  },
+
+  async login({ username, password }) {
+    const user = await User.findOne({ where: { username } });
+    if (!user) throw new Error("Utilisateur non trouvé");
+
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) throw new Error("Mot de passe incorrect");
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET || "secretdev", 
+      { expiresIn: "1h" }
+    );
+
+    return { user, token };
+  },
+};
+
+export default AuthService;
 
 
 ================================================================================
 File: src\services\GameConfigService.js
-Size: 784 B
+Size: 1.09 kB
 ================================================================================
 
-// src/services/GameConfigService.js
-import GameConfig from "../models/GameConfig.js"; 
-import { models } from "../models/index.js";
+import GameConfig from "../models/GameConfig.js";
 
-const { Game } = models;
+const GameConfigService = {
 
-export async function getConfigByGame(gameId) {
+  // Création explicite d'une config pour un jeu
+  async createConfig(gameId, initialSettings = {}) {
+    const existingConfig = await GameConfig.findOne({ gameId });
+    if (existingConfig) throw new Error("Configuration déjà existante pour ce jeu");
 
-  const game = await Game.findByPk(gameId);
-  if (!game) throw new Error("Jeu introuvable");
+    const config = await GameConfig.create({ gameId, settings: initialSettings });
+    return config;
+  },
 
-  const config = await GameConfig.findOne({ gameId });
-  if (!config) throw new Error("Configuration introuvable pour ce jeu");
+  // Récupère la config, crée une config vide si elle n'existe pas
+  async getConfigByGame(gameId) {
+    let config = await GameConfig.findOne({ gameId });
 
-  return config;
-}
+    if (!config) {
+      // crée une config vide si elle n’existe pas
+      config = await GameConfig.create({ gameId, settings: {} });
+    }
 
-export async function updateConfig(gameId, configData) {
-  const game = await Game.findByPk(gameId);
-  if (!game) throw new Error("Jeu introuvable");
+    return config;
+  },
 
-  const config = await GameConfig.findOneAndUpdate(
+  async updateConfig(gameId, configData) {
+  const updatedConfig = await GameConfig.findOneAndUpdate(
     { gameId },
-    { $set: configData },
-    { new: true, upsert: true } 
+    { $set: { ...configData, lastUpdated: new Date() } },
+    { new: true, upsert: true }
   );
+  return updatedConfig;
+  },
+};
 
-  return config;
-}
+export default GameConfigService;
 
 
 ================================================================================
 File: src\services\GameService.js
-Size: 1.44 kB
+Size: 986 B
 ================================================================================
 
 // src/services/GameService.js
-import { models } from "../models/index.js";
+import { Game, User } from "../models/index.js";
 
-const { Game, User } = models;
 
-class GameService {
-
-  static async createGame({ title, description, releaseDate }) {
-    if (!title) throw new Error("Le titre du jeu est obligatoire");
-    const game = await Game.create({ title, description, releaseDate });
-    return game;
-  }
-
-  static async getAllGames() {
-    return await Game.findAll({ include: User });
-  }
-
-  static async getGameById(id) {
-    const game = await Game.findByPk(id, { include: User });
-    if (!game) throw new Error("Jeu introuvable");
-    return game;
-  }
-
-  static async updateGame(id, data) {
-    const game = await Game.findByPk(id);
-    if (!game) throw new Error("Jeu introuvable");
-
-    await game.update(data);
-    return game;
-  }
-
-  static async deleteGame(id) {
-    const game = await Game.findByPk(id);
-    if (!game) throw new Error("Jeu introuvable");
-
-    await game.destroy();
-    return { message: "Jeu supprimé avec succès" };
-  }
-
-  static async assignUserToGame(userId, gameId) {
-    const user = await User.findByPk(userId);
-    const game = await Game.findByPk(gameId);
-
-    if (!user) throw new Error("Utilisateur introuvable");
-    if (!game) throw new Error("Jeu introuvable");
-
-    await game.addUser(user); 
-    return await Game.findByPk(gameId, { include: User });
-  }
+export async function createGame({ title, description, releaseDate }) {
+  if (!title) throw new Error("Le titre du jeu est obligatoire");
+  const game = await Game.create({ title, description, releaseDate });
+  return game;
 }
 
-export default GameService;
+export async function getAllGames() {
+  return await Game.findAll({ include: User });
+}
+
+export async function getGameById(id) {
+  const game = await Game.findByPk(id, { include: User });
+  if (!game) throw new Error("Jeu introuvable");
+  return game;
+}
+
+export async function updateGame(id, data) {
+  const game = await Game.findByPk(id);
+  if (!game) throw new Error("Jeu introuvable");
+
+  await game.update(data);
+  return game;
+}
+
+export async function deleteGame(id) {
+  const game = await Game.findByPk(id);
+  if (!game) throw new Error("Jeu introuvable");
+
+  await game.destroy();
+  return { message: "Jeu supprimé avec succès" };
+}
 
 
 ================================================================================
 File: src\services\UserService.js
-Size: 741 B
+Size: 2.73 kB
 ================================================================================
 
 // src/services/UserService.js
-import { models } from "../models/index.js";
+import { User, Role, Game } from "../models/index.js"; // import nommés depuis index.js
 import bcrypt from "bcrypt";
 
-const { User, Role } = models;
-
-class UserService {
-
-  static async createUser({ username, email, password, roleId }) {
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({ username, email, password: hashedPassword });
-
-    if (roleId) {
-      const role = await Role.findByPk(roleId);
-      if (!role) throw new Error("Rôle inexistant");
-      await user.addRole(role);
-    }
-
-    return await User.findByPk(user.id, { include: Role });
-  }
-
-  static async getAllUsers() {
-    return await User.findAll({ include: Role });
+export async function getUserById(id) {
+  try {
+    const user = await User.findByPk(id); // <-- pas d'include
+    if (!user) throw new Error("Utilisateur non trouvé");
+    return user;
+  } catch (error) {
+    throw new Error(`Erreur lors de la récupération de l'utilisateur : ${error.message}`);
   }
 }
 
-export default UserService;
+export async function getAllUsers() {
+  try {
+    const users = await User.findAll(); // <-- pas d'include
+    return users;
+  } catch (error) {
+    throw new Error(`Erreur lors de la récupération des utilisateurs : ${error.message}`);
+  }
+}
+
+export async function updateUser(id, data) {
+  try {
+    // Récupération de l'utilisateur
+    const user = await User.findByPk(id);
+    if (!user) throw new Error("Utilisateur non trouvé");
+
+    // Si le mot de passe est modifié, on le crypte
+    if (data.password) {
+      const hashed = await bcrypt.hash(data.password, 10);
+      data.password = hashed;
+    }
+
+    // Mise à jour de l'utilisateur
+    await user.update(data);
+
+    // Retourne l'utilisateur mis à jour **sans les relations**
+    return await User.findByPk(id); // pas d'include ici
+  } catch (error) {
+    throw new Error(`Erreur lors de la mise à jour : ${error.message}`);
+  }
+}
+
+export async function deleteUser(id) {
+  try {
+    const user = await User.findByPk(id);
+    if (!user) throw new Error("Utilisateur non trouvé");
+
+    await user.destroy();
+    return { message: "Utilisateur supprimé avec succès" };
+  } catch (error) {
+    throw new Error(`Erreur lors de la suppression : ${error.message}`);
+  }
+}
+
+export async function addGamesToUser(userId, gameIds) {
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) throw new Error("Utilisateur introuvable");
+
+    // On vérifie que gameIds est un tableau
+    if (!Array.isArray(gameIds)) {
+      throw new Error("Les identifiants de jeux doivent être fournis sous forme de tableau");
+    }
+
+    // On récupère tous les jeux correspondants
+    const games = await Game.findAll({
+      where: { id: gameIds },
+    });
+
+    if (games.length === 0) {
+      throw new Error("Aucun jeu trouvé avec les identifiants fournis");
+    }
+
+    // Associe les jeux à l'utilisateur (crée les lignes dans la table de jointure)
+    await user.addGames(games);
+
+    // Renvoie l'utilisateur avec ses jeux mis à jour
+    return await User.findByPk(userId, { include: [Role, Game] });
+  } catch (error) {
+    throw new Error(`Erreur lors de l'association des jeux : ${error.message}`); 
+  }
+}
+
 
 
 ================================================================================
 File: src\utils\backup.js
-Size: 24 B
-================================================================================
-
-//strat de sauvegarde DB
-
-================================================================================
-File: tests\integration\GameController.test.js
 Size: 0 B
 ================================================================================
 
+
+
+================================================================================
+File: tests\integration\GameController.test.js
+Size: 2.35 kB
+================================================================================
+
+// tests/game.test.js
+import request from "supertest";
+import express from "express";
+import gameRoutes from "../../src/routes/gameRoutes.js"; // tes routes
+import bodyParser from "body-parser";
+
+// Crée une instance Express pour les tests
+const app = express();
+app.use(bodyParser.json());
+app.use("/games", gameRoutes);
+
+// Mock du middleware d'authentification pour tests
+jest.mock("../../src/middlewares/authMiddleware.js", () => {
+  return (req, res, next) => next();
+});
+
+describe("Game API Integration Tests", () => {
+  let createdGameId;
+
+  // Test création de jeu
+  it("POST /games - doit créer un nouveau jeu", async () => {
+    const response = await request(app)
+      .post("/games")
+      .send({
+        title: "Test Game",
+        description: "Un jeu de test",
+        releaseDate: "2025-11-01"
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body.title).toBe("Test Game");
+
+    createdGameId = response.body.id;
+  });
+
+  // Test récupération de tous les jeux
+  it("GET /games - doit récupérer tous les jeux", async () => {
+    const response = await request(app).get("/games");
+
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.some(game => game.id === createdGameId)).toBe(true);
+  });
+
+  // Test récupération d'un jeu par ID
+  it("GET /games/:id - doit récupérer un jeu par ID", async () => {
+    const response = await request(app).get(`/games/${createdGameId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.id).toBe(createdGameId);
+    expect(response.body.title).toBe("Test Game");
+  });
+
+  // Test mise à jour d'un jeu
+  it("PUT /games/:id - doit mettre à jour un jeu", async () => {
+    const response = await request(app)
+      .put(`/games/${createdGameId}`)
+      .send({ title: "Test Game Updated" });
+
+    expect(response.status).toBe(200);
+    expect(response.body.title).toBe("Test Game Updated");
+  });
+
+  // Test suppression d'un jeu
+  it("DELETE /games/:id - doit supprimer un jeu", async () => {
+    const response = await request(app).delete(`/games/${createdGameId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message");
+  });
+});
 
 
 ================================================================================
 File: tests\integration\gameRoute.test.js
-Size: 0 B
+Size: 2.9 kB
 ================================================================================
 
+// tests/integration/GameRoutes.test.js
+import request from "supertest";
+import express from "express";
+import gameRouter from "../../src/routes/gameRoutes.js";
+
+// Mock du middleware d'authentification
+
+jest.mock("../../src/middlewares/authMiddleware.js", () => {
+  return (req, res, next) => next();
+});
+
+// Mock du service GameService pour ne pas toucher à la base
+import * as GameService from "../../src/services/GameService.js";
+jest.mock("../../src/services/GameService.js");
+
+const app = express();
+app.use(express.json());
+app.use("/games", gameRouter);
+
+describe("Intégration routes /games", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("GET /games - doit retourner la liste des jeux", async () => {
+    GameService.getAllGames.mockResolvedValue([
+      { id: 1, title: "Super Mario Odyssey", description: "Plateforme 3D", releaseDate: "2017-10-27" }
+    ]);
+
+    const res = await request(app).get("/games");
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0].title).toBe("Super Mario Odyssey");
+  });
+
+  test("GET /games/:id - doit retourner un jeu par ID", async () => {
+    GameService.getGameById.mockResolvedValue({
+      id: 1,
+      title: "Mario Kart 8 Deluxe",
+      description: "Jeu de course",
+      releaseDate: "2017-04-28"
+    });
+
+    const res = await request(app).get("/games/1");
+    expect(res.status).toBe(200);
+    expect(res.body.title).toBe("Mario Kart 8 Deluxe");
+  });
+
+  test("POST /games - doit créer un nouveau jeu", async () => {
+    const newGame = { id: 2, title: "Zelda Breath of the Wild", description: "Aventure", releaseDate: "2017-03-03" };
+    GameService.createGame.mockResolvedValue(newGame);
+
+    const res = await request(app)
+      .post("/games")
+      .send({ title: "Zelda Breath of the Wild", description: "Aventure", releaseDate: "2017-03-03" });
+
+    expect(res.status).toBe(201);
+    expect(res.body.id).toBe(2);
+    expect(res.body.title).toBe("Zelda Breath of the Wild");
+  });
+
+  test("PUT /games/:id - doit mettre à jour un jeu", async () => {
+    const updatedGame = { id: 1, title: "Zelda TOTK", description: "Suite de BOTW", releaseDate: "2023-05-12" };
+    GameService.updateGame.mockResolvedValue(updatedGame);
+
+    const res = await request(app)
+      .put("/games/1")
+      .send({ title: "Zelda TOTK", description: "Suite de BOTW", releaseDate: "2023-05-12" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.title).toBe("Zelda TOTK");
+  });
+
+  test("DELETE /games/:id - doit supprimer un jeu", async () => {
+    GameService.deleteGame.mockResolvedValue({ message: "Jeu supprimé avec succès" });
+
+    const res = await request(app).delete("/games/1");
+    expect(res.status).toBe(200);
+    expect(res.body.message).toBe("Jeu supprimé avec succès");
+  });
+});
 
 
 ================================================================================
 File: tests\integration\UserController.test.js
-Size: 0 B
+Size: 2.62 kB
 ================================================================================
 
+// tests/integration/UserController.test.js
+import request from "supertest";
+import express from "express";
+import userRouter from "../../src/routes/userRoutes.js";
+
+// Mock du middleware d'authentification
+jest.mock("../../src/middlewares/authMiddleware.js", () => {
+  return (req, res, next) => next();
+});
+
+// Mock du service UserService
+import * as UserService from "../../src/services/UserService.js";
+jest.mock("../../src/services/UserService.js");
+
+const app = express();
+app.use(express.json());
+app.use("/users", userRouter);
+
+describe("Intégration routes /users", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("GET /users - doit retourner la liste des utilisateurs", async () => {
+    UserService.getAllUsers.mockResolvedValue([
+      { id: 1, username: "johndoe", email: "johndoe@example.com" }
+    ]);
+
+    const res = await request(app).get("/users");
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0].username).toBe("johndoe");
+  });
+
+  test("GET /users/:id - doit retourner un utilisateur par ID", async () => {
+    UserService.getUserById.mockResolvedValue({ id: 1, username: "johndoe", email: "johndoe@example.com" });
+
+    const res = await request(app).get("/users/1");
+    expect(res.status).toBe(200);
+    expect(res.body.username).toBe("johndoe");
+  });
+
+  test("PUT /users/:id - doit mettre à jour un utilisateur", async () => {
+    const updatedUser = { id: 1, username: "johnny", email: "johnny@example.com" };
+    UserService.updateUser.mockResolvedValue(updatedUser);
+
+    const res = await request(app)
+      .put("/users/1")
+      .send({ username: "johnny", email: "johnny@example.com" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.username).toBe("johnny");
+  });
+
+  test("DELETE /users/:id - doit supprimer un utilisateur", async () => {
+    UserService.deleteUser.mockResolvedValue({ message: "Utilisateur supprimé" });
+
+    const res = await request(app).delete("/users/1");
+    expect(res.status).toBe(200);
+    expect(res.body.message).toBe("Utilisateur supprimé");
+  });
+
+  test("POST /users/:id/games - doit ajouter des jeux à un utilisateur", async () => {
+    const updatedUser = { id: 1, username: "johndoe", games: [1, 2] };
+    UserService.addGamesToUser.mockResolvedValue(updatedUser);
+
+    const res = await request(app)
+      .post("/users/1/games")
+      .send({ gameIds: [1, 2] });
+
+    expect(res.status).toBe(200);
+    expect(res.body.games).toHaveLength(2);
+    expect(res.body.games).toEqual([1, 2]);
+  });
+});
 
 
 ================================================================================
 File: tests\integration\userRoute.test.js
-Size: 0 B
+Size: 2.43 kB
 ================================================================================
 
+// tests/integration/userRoute.test.js
+import request from "supertest";
+import express from "express";
+import userRouter from "../../src/routes/userRoutes.js";
+
+// Mock du service UserService
+import * as UserService from "../../src/services/UserService.js";
+jest.mock("../../src/services/UserService.js");
+
+const app = express();
+app.use(express.json());
+app.use("/users", userRouter);
+
+describe("Intégration routes /users", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("GET /users - doit retourner tous les utilisateurs", async () => {
+    UserService.getAllUsers.mockResolvedValue([
+      { id: 1, username: "johndoe", email: "johndoe@example.com" }
+    ]);
+
+    const res = await request(app).get("/users");
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0].username).toBe("johndoe");
+  });
+
+  test("GET /users/:id - doit retourner un utilisateur par ID", async () => {
+    UserService.getUserById.mockResolvedValue({ id: 1, username: "johndoe", email: "johndoe@example.com" });
+
+    const res = await request(app).get("/users/1");
+    expect(res.status).toBe(200);
+    expect(res.body.username).toBe("johndoe");
+  });
+
+  test("PUT /users/:id - doit mettre à jour un utilisateur", async () => {
+    const updatedUser = { id: 1, username: "johnny", email: "johnny@example.com" };
+    UserService.updateUser.mockResolvedValue(updatedUser);
+
+    const res = await request(app)
+      .put("/users/1")
+      .send({ username: "johnny", email: "johnny@example.com" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.username).toBe("johnny");
+  });
+
+  test("DELETE /users/:id - doit supprimer un utilisateur", async () => {
+    UserService.deleteUser.mockResolvedValue({ message: "Utilisateur supprimé" });
+
+    const res = await request(app).delete("/users/1");
+    expect(res.status).toBe(200);
+    expect(res.body.message).toBe("Utilisateur supprimé");
+  });
+
+  test("POST /users/:id/games - doit ajouter des jeux à un utilisateur", async () => {
+    const updatedUser = { id: 1, username: "johndoe", games: [1, 2, 5] };
+    UserService.addGamesToUser.mockResolvedValue(updatedUser);
+
+    const res = await request(app)
+      .post("/users/1/games")
+      .send({ gameIds: [1, 2, 5] });
+
+    expect(res.status).toBe(200);
+    expect(res.body.games).toEqual([1, 2, 5]);
+  });
+});
 
 
 ================================================================================
 File: tests\unitaire\GameService.test.js
-Size: 0 B
+Size: 3.29 kB
 ================================================================================
 
+// tests/unitaire/GameService.test.js
+import * as GameService from "../../src/services/GameService.js";
+import { Game, User } from "../../src/models/index.js";
+
+// Mock des modèles Sequelize
+jest.mock("../../src/models/index.js", () => ({
+  Game: {
+    create: jest.fn(),
+    findAll: jest.fn(),
+    findByPk: jest.fn()
+  },
+  User: {}
+}));
+
+describe("Unit tests GameService", () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe("createGame", () => {
+    it("doit créer un jeu avec succès", async () => {
+      const gameData = { title: "Zelda", description: "Aventure", releaseDate: "2023-01-01" };
+      Game.create.mockResolvedValue(gameData);
+
+      const result = await GameService.createGame(gameData);
+      expect(Game.create).toHaveBeenCalledWith(gameData);
+      expect(result).toEqual(gameData);
+    });
+
+    it("doit lancer une erreur si le titre est manquant", async () => {
+      await expect(GameService.createGame({ description: "desc" }))
+        .rejects
+        .toThrow("Le titre du jeu est obligatoire");
+    });
+  });
+
+  describe("getAllGames", () => {
+    it("doit retourner tous les jeux avec les utilisateurs", async () => {
+      const games = [{ id: 1, title: "Zelda" }];
+      Game.findAll.mockResolvedValue(games);
+
+      const result = await GameService.getAllGames();
+      expect(Game.findAll).toHaveBeenCalledWith({ include: User });
+      expect(result).toEqual(games);
+    });
+  });
+
+  describe("getGameById", () => {
+    it("doit retourner un jeu existant", async () => {
+      const game = { id: 1, title: "Mario" };
+      Game.findByPk.mockResolvedValue(game);
+
+      const result = await GameService.getGameById(1);
+      expect(Game.findByPk).toHaveBeenCalledWith(1, { include: User });
+      expect(result).toEqual(game);
+    });
+
+    it("doit lancer une erreur si le jeu n'existe pas", async () => {
+      Game.findByPk.mockResolvedValue(null);
+      await expect(GameService.getGameById(999)).rejects.toThrow("Jeu introuvable");
+    });
+  });
+
+  describe("updateGame", () => {
+    it("doit mettre à jour un jeu existant", async () => {
+      const game = { update: jest.fn(), id: 1, title: "Old" };
+      Game.findByPk.mockResolvedValue(game);
+
+      const updatedData = { title: "New" };
+      await GameService.updateGame(1, updatedData);
+
+      expect(game.update).toHaveBeenCalledWith(updatedData);
+    });
+
+    it("doit lancer une erreur si le jeu n'existe pas", async () => {
+      Game.findByPk.mockResolvedValue(null);
+      await expect(GameService.updateGame(999, { title: "Test" })).rejects.toThrow("Jeu introuvable");
+    });
+  });
+
+  describe("deleteGame", () => {
+    it("doit supprimer un jeu existant", async () => {
+      const game = { destroy: jest.fn() };
+      Game.findByPk.mockResolvedValue(game);
+
+      const result = await GameService.deleteGame(1);
+      expect(game.destroy).toHaveBeenCalled();
+      expect(result).toEqual({ message: "Jeu supprimé avec succès" });
+    });
+
+    it("doit lancer une erreur si le jeu n'existe pas", async () => {
+      Game.findByPk.mockResolvedValue(null);
+      await expect(GameService.deleteGame(999)).rejects.toThrow("Jeu introuvable");
+    });
+  });
+
+});
 
 
 ================================================================================
 File: tests\unitaire\UserService.test.js
-Size: 0 B
+Size: 4.81 kB
 ================================================================================
 
+// tests/unitaire/UserService.test.js
+import * as UserService from "../../src/services/UserService.js";
+import { User, Game, Role } from "../../src/models/index.js";
+import bcrypt from "bcrypt";
+
+// Mocks
+jest.mock("../../src/models/index.js", () => ({
+  User: {
+    findByPk: jest.fn(),
+    findAll: jest.fn()
+  },
+  Game: {
+    findAll: jest.fn()
+  },
+  Role: {}
+}));
+
+jest.mock("bcrypt", () => ({
+  hash: jest.fn()
+}));
+
+describe("Unit tests UserService", () => {
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe("getUserById", () => {
+    it("doit retourner un utilisateur existant", async () => {
+      const user = { id: 1, username: "johndoe" };
+      User.findByPk.mockResolvedValue(user);
+
+      const result = await UserService.getUserById(1);
+      expect(User.findByPk).toHaveBeenCalledWith(1);
+      expect(result).toEqual(user);
+    });
+
+    it("doit lancer une erreur si l'utilisateur n'existe pas", async () => {
+      User.findByPk.mockResolvedValue(null);
+      await expect(UserService.getUserById(999))
+        .rejects.toThrow("Utilisateur non trouvé");
+    });
+  });
+
+  describe("getAllUsers", () => {
+    it("doit retourner tous les utilisateurs", async () => {
+      const users = [{ id: 1, username: "johndoe" }];
+      User.findAll.mockResolvedValue(users);
+
+      const result = await UserService.getAllUsers();
+      expect(User.findAll).toHaveBeenCalled();
+      expect(result).toEqual(users);
+    });
+  });
+
+  describe("updateUser", () => {
+    it("doit mettre à jour un utilisateur et hasher le mot de passe", async () => {
+      const user = { update: jest.fn() };
+      User.findByPk.mockResolvedValueOnce(user).mockResolvedValueOnce({ id: 1, username: "newuser" });
+      bcrypt.hash.mockResolvedValue("hashedpassword");
+
+      const data = { username: "newuser", password: "pass123" };
+      const result = await UserService.updateUser(1, data);
+
+      expect(bcrypt.hash).toHaveBeenCalledWith("pass123", 10);
+      expect(user.update).toHaveBeenCalledWith({ username: "newuser", password: "hashedpassword" });
+      expect(User.findByPk).toHaveBeenCalledWith(1);
+      expect(result).toEqual({ id: 1, username: "newuser" });
+    });
+
+    it("doit lancer une erreur si l'utilisateur n'existe pas", async () => {
+      User.findByPk.mockResolvedValue(null);
+      await expect(UserService.updateUser(999, { username: "test" }))
+        .rejects.toThrow("Utilisateur non trouvé");
+    });
+  });
+
+  describe("deleteUser", () => {
+    it("doit supprimer un utilisateur existant", async () => {
+      const user = { destroy: jest.fn() };
+      User.findByPk.mockResolvedValue(user);
+
+      const result = await UserService.deleteUser(1);
+      expect(user.destroy).toHaveBeenCalled();
+      expect(result).toEqual({ message: "Utilisateur supprimé avec succès" });
+    });
+
+    it("doit lancer une erreur si l'utilisateur n'existe pas", async () => {
+      User.findByPk.mockResolvedValue(null);
+      await expect(UserService.deleteUser(999)).rejects.toThrow("Utilisateur non trouvé");
+    });
+  });
+
+  describe("addGamesToUser", () => {
+    it("doit associer des jeux à un utilisateur", async () => {
+      const user = { addGames: jest.fn() };
+      const games = [{ id: 1 }, { id: 2 }];
+
+      User.findByPk.mockResolvedValueOnce(user).mockResolvedValueOnce({ id: 1, username: "johndoe", Games: games });
+      Game.findAll.mockResolvedValue(games);
+
+      const result = await UserService.addGamesToUser(1, [1, 2]);
+      expect(User.findByPk).toHaveBeenCalledTimes(2);
+      expect(Game.findAll).toHaveBeenCalledWith({ where: { id: [1, 2] } });
+      expect(user.addGames).toHaveBeenCalledWith(games);
+      expect(result).toEqual({ id: 1, username: "johndoe", Games: games });
+    });
+
+    it("doit lancer une erreur si l'utilisateur n'existe pas", async () => {
+      User.findByPk.mockResolvedValue(null);
+      await expect(UserService.addGamesToUser(999, [1, 2]))
+        .rejects.toThrow("Utilisateur introuvable");
+    });
+
+    it("doit lancer une erreur si gameIds n'est pas un tableau", async () => {
+      const user = { addGames: jest.fn() };
+      User.findByPk.mockResolvedValue(user);
+
+      await expect(UserService.addGamesToUser(1, "notarray"))
+        .rejects.toThrow("Les identifiants de jeux doivent être fournis sous forme de tableau");
+    });
+
+    it("doit lancer une erreur si aucun jeu trouvé", async () => {
+      const user = { addGames: jest.fn() };
+      User.findByPk.mockResolvedValue(user);
+      Game.findAll.mockResolvedValue([]);
+
+      await expect(UserService.addGamesToUser(1, [99]))
+        .rejects.toThrow("Aucun jeu trouvé avec les identifiants fournis");
+    });
+  });
+
+});
 

@@ -3,13 +3,10 @@ import request from "supertest";
 import express from "express";
 import gameRouter from "../../src/routes/gameRoutes.js";
 
-// Mock du middleware d'authentification
-
 jest.mock("../../src/middlewares/authMiddleware.js", () => {
   return (req, res, next) => next();
 });
 
-// Mock du service GameService pour ne pas toucher à la base
 import * as GameService from "../../src/services/GameService.js";
 jest.mock("../../src/services/GameService.js");
 

@@ -3,12 +3,10 @@ import request from "supertest";
 import express from "express";
 import userRouter from "../../src/routes/userRoutes.js";
 
-// Mock du middleware d'authentification
 jest.mock("../../src/middlewares/authMiddleware.js", () => {
   return (req, res, next) => next();
 });
 
-// Mock du service UserService
 import * as UserService from "../../src/services/UserService.js";
 jest.mock("../../src/services/UserService.js");
 
