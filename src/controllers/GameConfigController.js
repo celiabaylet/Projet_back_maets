@@ -1,6 +1,6 @@
+// src/controllers/GameConfigController.js
 import GameConfigService from "../services/GameConfigService.js";
 
-// POST : création explicite d'une config
 export const createConfig = async (req, res) => {
   try {
     const config = await GameConfigService.createConfig(
@@ -14,7 +14,6 @@ export const createConfig = async (req, res) => {
   }
 };
 
-// GET : récupère la config (créée automatiquement si inexistante)
 export const getConfigByGame = async (req, res) => {
   try {
     const config = await GameConfigService.getConfigByGame(parseInt(req.params.gameId));
@@ -25,7 +24,6 @@ export const getConfigByGame = async (req, res) => {
   }
 };
 
-// PUT : met à jour ou crée la config
 export const updateConfig = async (req, res) => {
   try {
     const updatedConfig = await GameConfigService.updateConfig(

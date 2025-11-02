@@ -1,7 +1,6 @@
 // src/middleware/authenticateToken.js
 import jwt from "jsonwebtoken";
 
-// Middleware pour vérifier le token JWT
 export default function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"]; 
   const token = authHeader && authHeader.split(" ")[1];

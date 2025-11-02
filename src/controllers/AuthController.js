@@ -12,7 +12,6 @@ export async function register(req, res) {
       return res.status(400).json({ error: "Username, email et password requis" });
     }
 
-    // Vérifie si email OU username déjà utilisés
     const existing = await User.findOne({ 
       where: { [Op.or]: [{ email }, { username }] }
     });

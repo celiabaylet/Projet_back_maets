@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import gameRoutes from "./routes/gameRoutes.js";
 import gameConfigRoutes from "./routes/gameConfigRoute.js"; 
 import { setupSwagger } from './config/swagger.js'; 
+import errorHandler from "./middlewares/errorHandler.js";
 
 dotenv.config();
 
@@ -25,5 +26,7 @@ app.use("/api/games", gameRoutes);
 app.use("/api/config", gameConfigRoutes);
 
 setupSwagger(app);
+
+app.use(errorHandler);
 
 export default app;

@@ -1,7 +1,6 @@
 // src/controllers/GameController.js
 import * as GameService from "../services/GameService.js";
 
-// Création d'un jeu
 export async function createGame(req, res) {
   try {
     const game = await GameService.createGame(req.body);
@@ -11,7 +10,6 @@ export async function createGame(req, res) {
   }
 }
 
-// Récupération de tous les jeux
 export async function getAllGames(req, res) {
   try {
     const games = await GameService.getAllGames();
@@ -21,7 +19,6 @@ export async function getAllGames(req, res) {
   }
 }
 
-// Récupération d'un jeu par ID
 export async function getGameById(req, res) {
   try {
     const game = await GameService.getGameById(req.params.id);
@@ -31,7 +28,6 @@ export async function getGameById(req, res) {
   }
 }
 
-// Mise à jour d'un jeu
 export async function updateGame(req, res) {
   try {
     const game = await GameService.updateGame(req.params.id, req.body);
@@ -41,7 +37,6 @@ export async function updateGame(req, res) {
   }
 }
 
-// Suppression d'un jeu
 export async function deleteGame(req, res) {
   try {
     const result = await GameService.deleteGame(req.params.id);
